@@ -1,0 +1,205 @@
+# EESchema Netlist Version 1.1 created  16/02/2012 22:37:04
+(
+ ( /4F3C07BD C1 C1 100nF
+  ( 1 N-000016 )
+  ( 2 GND )
+ )
+ ( /4F3C0937 C1 C3 100nF
+  ( 1 +5V )
+  ( 2 GND )
+ )
+ ( /4F3BE52C SIL-14 D_LCD1 DISPLAY_HD44780
+  ( 1 GND )
+  ( 2 +5V )
+  ( 3 N-000002 )
+  ( 4 N-000014 )
+  ( 5 GND )
+  ( 6 N-000015 )
+  ( 7 ? )
+  ( 8 ? )
+  ( 9 ? )
+  ( 10 ? )
+  ( 11 N-000007 )
+  ( 12 N-000012 )
+  ( 13 N-000020 )
+  ( 14 N-000019 )
+  ( 15 ? )
+  ( 16 ? )
+ )
+ ( /4F3BDC22 DIP-28__300 IC1 ATMEGA8-P
+  ( 1 N-000029 )
+  ( 2 N-000007 )
+  ( 3 N-000012 )
+  ( 4 N-000020 )
+  ( 5 N-000019 )
+  ( 6 N-000014 )
+  ( 7 +5V )
+  ( 8 GND )
+  ( 9 ? )
+  ( 10 ? )
+  ( 11 N-000015 )
+  ( 12 ? )
+  ( 13 N-000018 )
+  ( 14 N-000023 )
+  ( 15 N-000024 )
+  ( 16 N-000026 )
+  ( 17 N-000025 )
+  ( 18 N-000027 )
+  ( 19 N-000028 )
+  ( 20 +5V )
+  ( 21 N-000016 )
+  ( 22 GND )
+  ( 23 N-000030 )
+  ( 24 N-000032 )
+  ( 25 N-000031 )
+  ( 26 ? )
+  ( 27 ? )
+  ( 28 BATT_STATUS )
+ )
+ ( /4F3BE25C SIL-3 K1 TEST_POINTS
+  ( 1 N-000030 )
+  ( 2 N-000032 )
+  ( 3 N-000031 )
+ )
+ ( /4F3BE12C R5 R1 680R
+  ( 1 N-000023 )
+  ( 2 N-000030 )
+ )
+ ( /4F3BE12B R5 R2 470K
+  ( 1 N-000030 )
+  ( 2 N-000024 )
+ )
+ ( /4F3BE034 R5 R3 680R
+  ( 1 N-000026 )
+  ( 2 N-000032 )
+ )
+ ( /4F3BE035 R5 R4 470K
+  ( 1 N-000032 )
+  ( 2 N-000025 )
+ )
+ ( /4F3BDC49 R5 R5 680R
+  ( 1 N-000027 )
+  ( 2 N-000031 )
+ )
+ ( /4F3BDC44 R5 R6 470K
+  ( 1 N-000031 )
+  ( 2 N-000028 )
+ )
+ ( /4F3C1081 R5 R11 10K
+  ( 1 N-000033 )
+  ( 2 BATT_STATUS )
+ )
+ ( /4F3C1083 R5 R12 3K3
+  ( 1 BATT_STATUS )
+  ( 2 GND )
+ )
+ ( /4F3C0673 R5 R13 10K
+  ( 1 +5V )
+  ( 2 N-000029 )
+ )
+ ( /4F3BE68F R5 R14 1K
+  ( 1 N-000002 )
+  ( 2 GND )
+ )
+ ( /4F3C09DA SW_PUSH_SMALL S1 Tester_(optional)
+  ( 1 GND )
+  ( 2 N-000018 )
+ )
+ ( /4F3C0B52 SW_PUSH_SMALL S2 ON_/_OFF
+  ( 1 N-000033 )
+  ( 2 +9V )
+ )
+ ( /4F3C0AE5 LM78LXX U2 78L05
+  ( GND GND )
+  ( VI N-000033 )
+  ( VO +5V )
+ )
+)
+*
+{ Allowed footprints by component:
+$component C1
+ SM*
+ C?
+ C1-1
+$endlist
+$component C3
+ SM*
+ C?
+ C1-1
+$endlist
+$component IC1
+ 28DIP-ELL600
+ 28dip600
+$endlist
+$component R1
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R6
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R11
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R12
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R13
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R14
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$endfootprintlist
+}

@@ -1,0 +1,129 @@
+Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 16/02/2012 22:37:04
+
+BeginCmp
+TimeStamp = /4F3C07BD;
+Reference = C1;
+ValeurCmp = 100nF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C0937;
+Reference = C3;
+ValeurCmp = 100nF;
+IdModule  = C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE52C;
+Reference = D_LCD1;
+ValeurCmp = DISPLAY_HD44780;
+IdModule  = SIL-14;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BDC22;
+Reference = IC1;
+ValeurCmp = ATMEGA8-P;
+IdModule  = DIP-28__300;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE25C;
+Reference = K1;
+ValeurCmp = TEST_POINTS;
+IdModule  = SIL-3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE12C;
+Reference = R1;
+ValeurCmp = 680R;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE12B;
+Reference = R2;
+ValeurCmp = 470K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE034;
+Reference = R3;
+ValeurCmp = 680R;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE035;
+Reference = R4;
+ValeurCmp = 470K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BDC49;
+Reference = R5;
+ValeurCmp = 680R;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BDC44;
+Reference = R6;
+ValeurCmp = 470K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C1081;
+Reference = R11;
+ValeurCmp = 10K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C1083;
+Reference = R12;
+ValeurCmp = 3K3;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C0673;
+Reference = R13;
+ValeurCmp = 10K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3BE68F;
+Reference = R14;
+ValeurCmp = 1K;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C09DA;
+Reference = S1;
+ValeurCmp = Tester_(optional);
+IdModule  = SW_PUSH_SMALL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C0B52;
+Reference = S2;
+ValeurCmp = ON_/_OFF;
+IdModule  = SW_PUSH_SMALL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C0AE5;
+Reference = U2;
+ValeurCmp = 78L05;
+IdModule  = LM78LXX;
+EndCmp
+
+EndListe
