@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 19/02/2012 02:10:35
+Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 19/02/2012 18:04:00
 
 BeginCmp
 TimeStamp = /4F3C07BD;
@@ -18,7 +18,7 @@ BeginCmp
 TimeStamp = /4F3BE52C;
 Reference = D_LCD1;
 ValeurCmp = DISPLAY_HD44780;
-IdModule  = SIL-14;
+IdModule  = SparkFun-LCD-16X2_Shifted;
 EndCmp
 
 BeginCmp
@@ -102,7 +102,7 @@ BeginCmp
 TimeStamp = /4F3C0673;
 Reference = R13;
 ValeurCmp = 10K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = R5;
 EndCmp
 
 BeginCmp
@@ -110,6 +110,13 @@ TimeStamp = /4F3BE68F;
 Reference = R14;
 ValeurCmp = 1K;
 IdModule  = R4-LARGE_PADS;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F411152;
+Reference = R_LED_1;
+ValeurCmp = 10R;
+IdModule  = R5;
 EndCmp
 
 BeginCmp
@@ -121,7 +128,7 @@ EndCmp
 
 BeginCmp
 TimeStamp = /4F3C0AE5;
-Reference = U2;
+Reference = IC2;
 ValeurCmp = 78L05;
 IdModule  = LM78LXX;
 EndCmp

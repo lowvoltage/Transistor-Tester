@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  19/02/2012 02:10:35
+# EESchema Netlist Version 1.1 created  19/02/2012 18:04:00
 (
  ( /4F3C07BD C1 C1 100nF
   ( 1 N-000014 )
@@ -8,7 +8,7 @@
   ( 1 +5V )
   ( 2 GND )
  )
- ( /4F3BE52C SIL-14 D_LCD1 DISPLAY_HD44780
+ ( /4F3BE52C SparkFun-LCD-16X2_Shifted D_LCD1 DISPLAY_HD44780
   ( 1 GND )
   ( 2 +5V )
   ( 3 N-000002 )
@@ -23,8 +23,8 @@
   ( 12 N-000019 )
   ( 13 N-000016 )
   ( 14 N-000029 )
-  ( 15 ? )
-  ( 16 ? )
+  ( 15 N-000034 )
+  ( 16 GND )
  )
  ( /4F3BDC22 DIP-28__300_ELL IC1 ATMEGA8-P
   ( 1 N-000027 )
@@ -97,7 +97,7 @@
   ( 1 BATT_STATUS )
   ( 2 GND )
  )
- ( /4F3C0673 R4-LARGE_PADS R13 10K
+ ( /4F3C0673 R5 R13 10K
   ( 1 +5V )
   ( 2 N-000027 )
  )
@@ -105,11 +105,15 @@
   ( 1 N-000002 )
   ( 2 GND )
  )
+ ( /4F411152 R5 R_LED_1 10R
+  ( 1 +5V )
+  ( 2 N-000034 )
+ )
  ( /4F3C09DA SW_PUSH_SMALL S1 Tester_(optional)
   ( 1 GND )
   ( 2 N-000015 )
  )
- ( /4F3C0AE5 LM78LXX U2 78L05
+ ( /4F3C0AE5 LM78LXX IC2 78L05
   ( GND GND )
   ( VI /VIN )
   ( VO +5V )
@@ -195,6 +199,13 @@ $component R13
  SM1206
 $endlist
 $component R14
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R_LED_1
  R?
  SM0603
  SM0805

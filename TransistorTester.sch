@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 19/02/2012 11:03:57
+EESchema Schematic File Version 2  date 19/02/2012 18:02:46
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -37,8 +37,8 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "AVR Transistor Tester"
-Date "18 feb 2012"
-Rev "0.2"
+Date "19 feb 2012"
+Rev "0.3"
 Comp ""
 Comment1 "Drawn by Dimitar Kovachev"
 Comment2 "Designed by Markus Frejek http://www.mikrocontroller.net/articles/AVR-Transistortester"
@@ -47,6 +47,14 @@ Comment4 ""
 $EndDescr
 Text Label 1450 2850 0    60   ~ 0
 VIN
+Wire Wire Line
+	6500 5000 6450 5000
+Wire Wire Line
+	7000 5150 7000 5100
+Wire Wire Line
+	7000 5100 7050 5100
+Wire Wire Line
+	7050 5000 7000 5000
 Wire Wire Line
 	1450 3650 1450 2100
 Wire Wire Line
@@ -196,10 +204,10 @@ Connection ~ 1450 3500
 Wire Wire Line
 	5750 3300 5850 3300
 $Comp
-L GND #PWR?
+L GND #PWR01
 U 1 1 4F3FC649
 P 1650 2300
-F 0 "#PWR?" H 1650 2300 30  0001 C CNN
+F 0 "#PWR01" H 1650 2300 30  0001 C CNN
 F 1 "GND" H 1650 2230 30  0001 C CNN
 	1    1650 2300
 	1    0    0    -1  
@@ -246,8 +254,6 @@ F 1 "PWR_FLAG" H 1250 2380 30  0000 C CNN
 	1    1250 2200
 	1    0    0    -1  
 $EndComp
-NoConn ~ 7050 5100
-NoConn ~ 7050 5000
 NoConn ~ 7050 4500
 NoConn ~ 7050 4400
 NoConn ~ 7050 4300
@@ -276,10 +282,10 @@ F 1 "+5V" H 2450 3490 30  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 78L05 U2
+L 78L05 IC2
 U 1 1 4F3C0AE5
 P 1950 3550
-F 0 "U2" H 2100 3354 60  0000 C CNN
+F 0 "IC2" H 2100 3354 60  0000 C CNN
 F 1 "78L05" H 1950 3750 60  0000 C CNN
 	1    1950 3550
 	1    0    0    -1  
@@ -473,5 +479,33 @@ F 1 "ATMEGA8-P" H 5100 1800 50  0000 L BNN
 F 2 "DIL28" H 4150 1850 50  0001 C CNN
 	1    4750 3200
 	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR012
+U 1 1 4F41114D
+P 7000 5150
+F 0 "#PWR012" H 7000 5150 30  0001 C CNN
+F 1 "GND" H 7000 5080 30  0001 C CNN
+	1    7000 5150
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR013
+U 1 1 4F411164
+P 6450 5000
+F 0 "#PWR013" H 6450 5090 20  0001 C CNN
+F 1 "+5V" H 6450 5090 30  0000 C CNN
+	1    6450 5000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L R R_LED_1
+U 1 1 4F411152
+P 6750 5000
+F 0 "R_LED_1" V 6830 5000 50  0000 C CNN
+F 1 "10R" V 6750 5000 50  0000 C CNN
+F 2 "R5" H 6750 5000 60  0001 C CNN
+	1    6750 5000
+	0    1    1    0   
 $EndComp
 $EndSCHEMATC
