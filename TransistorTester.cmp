@@ -18,7 +18,7 @@ BeginCmp
 TimeStamp = /4F3BE52C;
 Reference = D_LCD1;
 ValeurCmp = DISPLAY_HD44780;
-IdModule  = SparkFun-LCD-16X2_Shifted;
+IdModule  = LV_1602-LCD-6+6pin;
 EndCmp
 
 BeginCmp
@@ -26,6 +26,13 @@ TimeStamp = /4F3BDC22;
 Reference = IC1;
 ValeurCmp = ATMEGA8-P;
 IdModule  = DIP-28__300_ELL;
+EndCmp
+
+BeginCmp
+TimeStamp = /4F3C0AE5;
+Reference = IC2;
+ValeurCmp = 78L05;
+IdModule  = LM78LXX;
 EndCmp
 
 BeginCmp
@@ -114,23 +121,16 @@ EndCmp
 
 BeginCmp
 TimeStamp = /4F411152;
-Reference = R_LED_1;
-ValeurCmp = 10R;
+Reference = R15;
+ValeurCmp = 100R;
 IdModule  = R5;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C09DA;
 Reference = S1;
-ValeurCmp = Tester_(optional);
-IdModule  = SW_PUSH_SMALL;
-EndCmp
-
-BeginCmp
-TimeStamp = /4F3C0AE5;
-Reference = IC2;
-ValeurCmp = 78L05;
-IdModule  = LM78LXX;
+ValeurCmp = Test;
+IdModule  = LV_WideBUTVERT;
 EndCmp
 
 EndListe

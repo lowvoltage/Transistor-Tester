@@ -8,7 +8,7 @@
   ( 1 +5V )
   ( 2 GND )
  )
- ( /4F3BE52C SparkFun-LCD-16X2_Shifted D_LCD1 DISPLAY_HD44780
+ ( /4F3BE52C LV_1602-LCD-6+6pin D_LCD1 DISPLAY_HD44780
   ( 1 GND )
   ( 2 +5V )
   ( 3 N-000002 )
@@ -55,6 +55,11 @@
   ( 26 ? )
   ( 27 ? )
   ( 28 BATT_STATUS )
+ )
+ ( /4F3C0AE5 LM78LXX IC2 78L05
+  ( GND GND )
+  ( VI /VIN )
+  ( VO +5V )
  )
  ( /4F3BE25C SIL-3 J1 TEST_POINTS
   ( 1 N-000030 )
@@ -105,18 +110,13 @@
   ( 1 N-000002 )
   ( 2 GND )
  )
- ( /4F411152 R5 R_LED_1 10R
+ ( /4F411152 R5 R15 100R
   ( 1 +5V )
   ( 2 N-000034 )
  )
- ( /4F3C09DA SW_PUSH_SMALL S1 Tester_(optional)
+ ( /4F3C09DA MINIBUTVERT S1 Test
   ( 1 GND )
   ( 2 N-000015 )
- )
- ( /4F3C0AE5 LM78LXX IC2 78L05
-  ( GND GND )
-  ( VI /VIN )
-  ( VO +5V )
  )
 )
 *
@@ -205,7 +205,7 @@ $component R14
  R?-*
  SM1206
 $endlist
-$component R_LED_1
+$component R15
  R?
  SM0603
  SM0805

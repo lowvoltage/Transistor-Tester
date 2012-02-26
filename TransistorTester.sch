@@ -37,12 +37,12 @@ $Descr A4 11700 8267
 encoding utf-8
 Sheet 1 1
 Title "AVR Transistor Tester"
-Date "19 feb 2012"
-Rev "0.3"
+Date "26 feb 2012"
+Rev "0.4"
 Comp ""
-Comment1 "Drawn by Dimitar Kovachev"
-Comment2 "Designed by Markus Frejek http://www.mikrocontroller.net/articles/AVR-Transistortester"
-Comment3 ""
+Comment1 "Schematic and PCB design by Dimitar Kovachev"
+Comment2 "http://www.mikrocontroller.net/articles/AVR-Transistortester"
+Comment3 "Original design by Markus Frejek "
 Comment4 ""
 $EndDescr
 Text Label 1450 2850 0    60   ~ 0
@@ -304,7 +304,7 @@ L SPST S1
 U 1 1 4F3C09DA
 P 5850 4700
 F 0 "S1" H 5850 4800 70  0000 C CNN
-F 1 "Tester (optional)" H 5850 4600 70  0000 C CNN
+F 1 "Test" H 5850 4600 70  0000 C CNN
 	1    5850 4700
 	0    -1   -1   0   
 $EndComp
@@ -499,11 +499,11 @@ F 1 "+5V" H 6450 5090 30  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R R_LED_1
+L R R15
 U 1 1 4F411152
 P 6750 5000
-F 0 "R_LED_1" V 6830 5000 50  0000 C CNN
-F 1 "10R" V 6750 5000 50  0000 C CNN
+F 0 "R15" V 6830 5000 50  0000 C CNN
+F 1 "100R" V 6750 5000 50  0000 C CNN
 F 2 "R5" H 6750 5000 60  0001 C CNN
 	1    6750 5000
 	0    1    1    0   
