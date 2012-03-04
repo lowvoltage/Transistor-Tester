@@ -65,7 +65,7 @@ LibName27=opto
 LibName28=atmel
 LibName29=contrib
 LibName30=valves
-LibName31=display_lcd
+LibName31=../KiCAD-Libraries/lowvoltage
 [pcbnew]
 version=1
 PadDrlX=320

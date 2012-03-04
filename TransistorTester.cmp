@@ -4,20 +4,20 @@ BeginCmp
 TimeStamp = /4F3C07BD;
 Reference = C1;
 ValeurCmp = 100nF;
-IdModule  = C1;
+IdModule  = LV_C1;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C0937;
 Reference = C3;
 ValeurCmp = 100nF;
-IdModule  = C1;
+IdModule  = LV_C1;
 EndCmp
 
 BeginCmp
-TimeStamp = /4F3BE52C;
+TimeStamp = /4F53BDBA;
 Reference = D_LCD1;
-ValeurCmp = DISPLAY_HD44780;
+ValeurCmp = LV_1602_LCD_HD44780;
 IdModule  = LV_1602-LCD-6+6pin;
 EndCmp
 
@@ -53,77 +53,77 @@ BeginCmp
 TimeStamp = /4F3BE12C;
 Reference = R1;
 ValeurCmp = 680R;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE12B;
 Reference = R2;
 ValeurCmp = 470K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE034;
 Reference = R3;
 ValeurCmp = 680R;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE035;
 Reference = R4;
 ValeurCmp = 470K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BDC49;
 Reference = R5;
 ValeurCmp = 680R;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BDC44;
 Reference = R6;
 ValeurCmp = 470K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C1081;
 Reference = R11;
 ValeurCmp = 10K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C1083;
 Reference = R12;
 ValeurCmp = 3K3;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C0673;
 Reference = R13;
 ValeurCmp = 10K;
-IdModule  = R5;
+IdModule  = LV_R5;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE68F;
 Reference = R14;
 ValeurCmp = 1K;
-IdModule  = R4-LARGE_PADS;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F411152;
 Reference = R15;
 ValeurCmp = 100R;
-IdModule  = R5;
+IdModule  = LV_R5;
 EndCmp
 
 BeginCmp
