@@ -1,4 +1,4 @@
-PCBNEW-BOARD Version 1 date Tue 10 Jul 2012 12:44:50 AM EEST
+PCBNEW-BOARD Version 1 date Tue 10 Jul 2012 01:21:15 AM EEST
 
 # Created by Pcbnew(2011-nov-30)-testing
 
@@ -10,7 +10,7 @@ EnabledLayers 1FFF8001
 Links 59
 NoConn 0
 Di 13702 13875 51594 32030
-Ndraw 17
+Ndraw 25
 Ntrack 175
 Nzone 0
 BoardThickness 630
@@ -58,9 +58,9 @@ TextModWidth 120
 PadSize 550 550
 PadDrill 320
 Pad2MaskClearance 50
-AuxiliaryAxisOrg 0 0
+AuxiliaryAxisOrg 19000 28500
 VisibleElements FFFFFFBF
-PcbPlotParams (pcbplotparams (layerselection 6291457) (usegerberextensions true) (excludeedgelayer true) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin true) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue false) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 1) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory gerb/))
+PcbPlotParams (pcbplotparams (layerselection 274726913) (usegerberextensions true) (excludeedgelayer true) (linewidth 60) (plotframeref false) (viasonmask false) (mode 1) (useauxorigin true) (hpglpennumber 1) (hpglpenspeed 20) (hpglpendiameter 15) (hpglpenoverlay 0) (pscolor true) (psnegative false) (psa4output false) (plotreference true) (plotvalue true) (plotothertext true) (plotinvisibletext false) (padsonsilk false) (subtractmaskfromsilk false) (outputformat 1) (mirror false) (drillshape 1) (scaleselection 1) (outputdirectory gerb/))
 $EndSETUP
 
 $EQUIPOT
@@ -214,14 +214,14 @@ AddNet "/VIN"
 AddNet "GND"
 $EndNCLASS
 $MODULE SIL-3
-Po 35500 27500 0 15 4F4A0736 4F4A05ED ~~
+Po 35500 27500 0 15 4FFB578E 4F4A05ED ~~
 Li SIL-3
 Cd Connecteur 3 pins
 Kw CONN DEV
 Sc 4F4A05ED
 AR /4F3BE25C
 Op 0 0 0
-T0 2250 -500 600 600 0 120 N V 21 N "J1"
+T0 1500 -1000 600 600 0 120 N V 21 N "J1"
 T1 13500 3000 600 400 0 100 N I 21 N "TEST_POINTS"
 DS -1500 500 -1500 -500 120 21
 DS -1500 -500 1500 -500 120 21
@@ -1254,14 +1254,14 @@ Ro 0 0 0
 $EndSHAPE3D
 $EndMODULE LV_C1
 $MODULE LV_R4
-Po 22500 21000 2700 15 4FFB41A2 4FFB312A ~~
+Po 22500 21000 2700 15 4FFB58CD 4FFB312A ~~
 Li LV_R4
 Cd 1/4W Resistor, 0.4" spacing, 0.8mm hole, 1.6mm pad
 Kw R
 Sc 4FFB312A
 AR /4FFB3056
 Op 0 A 0
-T0 2500 0 550 500 3600 80 N V 21 N "R16"
+T0 -2000 1000 550 500 3600 80 N V 21 N "R16"
 T1 0 0 550 500 2700 80 N I 21 N "10k"
 DS -2000 0 -1600 0 120 21
 DS -1600 0 -1600 -400 120 21
@@ -1485,6 +1485,45 @@ Ne 1 "+5V"
 Po 0 0
 $EndPAD
 $EndMODULE 1PAD
+$TEXTPCB
+Te "Transistor Tester"
+Po 25250 24500 800 1000 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$DRAWSEGMENT
+Po 0 26500 17000 30500 17000 150
+De 21 0 900 0 0
+$EndDRAWSEGMENT
+$TEXTPCB
+Te "+5"
+Po 25250 18000 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$TEXTPCB
+Te "G"
+Po 23500 18000 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$TEXTPCB
+Te "1"
+Po 33500 27500 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$TEXTPCB
+Te "O"
+Po 39500 20500 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$TEXTPCB
+Te "G"
+Po 40500 20500 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
+$TEXTPCB
+Te "I"
+Po 41000 22000 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
 $COTATION
 Ge 0 25 0
 Va 14250
@@ -1517,8 +1556,8 @@ Po 41000 15500 600 600 120 2700
 De 21 1 0 Normal C
 $EndTEXTPCB
 $TEXTPCB
-Te "1 2 3"
-Po 35500 26750 600 600 120 0
+Te "3"
+Po 37500 27500 600 600 120 0
 De 21 1 0 Normal C
 $EndTEXTPCB
 $COTATION
@@ -1851,15 +1890,15 @@ Po 0 23500 26750 23500 24000 160 -1
 De 0 0 14 4FFB4124 0
 Po 0 24500 19000 24500 19500 160 -1
 De 0 0 15 0 0
-Po 0 26000 26500 26500 27000 160 -1
+Po 0 25500 26000 26500 27000 160 -1
 De 0 0 15 4FFB1697 0
-Po 0 26000 25000 26000 26500 160 -1
+Po 0 25500 24500 25500 26000 160 -1
 De 0 0 15 4FFB168F 0
-Po 0 24000 23000 26000 25000 160 -1
+Po 0 23500 22500 25500 24500 160 -1
 De 0 0 15 4FFB1688 0
-Po 0 24000 20000 24000 23000 160 -1
+Po 0 23500 20500 23500 22500 160 -1
 De 0 0 15 4FFB1687 0
-Po 0 24500 19500 24000 20000 160 -1
+Po 0 24500 19500 23500 20500 160 -1
 De 0 0 15 4FFB1683 0
 Po 0 24500 22000 24500 22500 160 -1
 De 0 0 16 0 0
