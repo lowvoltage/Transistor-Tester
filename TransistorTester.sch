@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date 19/02/2012 18:02:46
+EESchema Schematic File Version 2  date Mon 09 Jul 2012 10:21:46 PM EEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -33,19 +33,19 @@ LIBS:lowvoltage
 LIBS:TransistorTester-cache
 EELAYER 25  0
 EELAYER END
-$Descr A4 11700 8267
+$Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "AVR Transistor Tester"
-Date "26 feb 2012"
-Rev "0.4"
+Date "9 jul 2012"
+Rev "0.5"
 Comp ""
 Comment1 "Schematic and PCB design by Dimitar Kovachev"
 Comment2 "http://www.mikrocontroller.net/articles/AVR-Transistortester"
 Comment3 "Original design by Markus Frejek "
 Comment4 ""
 $EndDescr
-Text Label 1450 2850 0    60   ~ 0
+Text Label 1450 2600 0    60   ~ 0
 VIN
 Wire Wire Line
 	6500 5000 6450 5000
@@ -56,28 +56,26 @@ Wire Wire Line
 Wire Wire Line
 	7050 5000 7000 5000
 Wire Wire Line
-	1450 3650 1450 2100
+	1450 3150 1450 3650
 Wire Wire Line
 	1650 2300 1650 2100
 Connection ~ 1450 4200
 Wire Wire Line
 	1350 4200 1450 4200
 Wire Wire Line
-	1450 4250 1450 4150
+	1450 4150 1450 4250
 Wire Wire Line
 	6500 3800 6450 3800
 Wire Wire Line
-	1550 3500 1450 3500
+	1450 3500 2000 3500
 Wire Wire Line
 	5750 3900 7050 3900
 Wire Wire Line
 	7050 3600 6450 3600
 Wire Wire Line
-	1950 4900 1950 3800
+	2400 3800 2400 4900
 Wire Wire Line
 	3300 2100 3250 2100
-Wire Wire Line
-	5850 5300 5850 5200
 Connection ~ 3250 2300
 Wire Wire Line
 	3250 1700 3250 2400
@@ -107,7 +105,7 @@ Wire Wire Line
 	5750 3500 6350 3500
 Connection ~ 6850 2900
 Wire Wire Line
-	7500 2900 5750 2900
+	5750 2900 7500 2900
 Wire Wire Line
 	7300 2800 7300 2150
 Wire Wire Line
@@ -142,10 +140,10 @@ Connection ~ 7250 2150
 Wire Wire Line
 	6750 2200 5750 2200
 Wire Wire Line
-	7500 2800 5750 2800
+	5750 2800 7500 2800
 Connection ~ 7300 2800
 Wire Wire Line
-	7500 3000 5750 3000
+	5750 3000 7500 3000
 Connection ~ 6400 3000
 Wire Wire Line
 	6300 3600 5750 3600
@@ -172,7 +170,7 @@ Connection ~ 3250 2100
 Wire Wire Line
 	4750 4700 4750 4800
 Wire Wire Line
-	3700 2800 3250 2800
+	3250 2800 3700 2800
 Connection ~ 3550 2800
 Wire Wire Line
 	3850 2400 3550 2400
@@ -181,9 +179,9 @@ Wire Wire Line
 Wire Wire Line
 	3800 2100 3850 2100
 Wire Wire Line
-	2350 3500 2450 3500
+	2800 3500 3250 3500
 Wire Wire Line
-	2450 3500 2450 3400
+	3250 3500 3250 3400
 Wire Wire Line
 	7050 4000 6450 4000
 Wire Wire Line
@@ -198,8 +196,8 @@ Connection ~ 1450 2300
 Wire Wire Line
 	1450 4750 1450 4800
 Wire Wire Line
-	1450 4800 1950 4800
-Connection ~ 1950 4800
+	1450 4800 3000 4800
+Connection ~ 2400 4800
 Connection ~ 1450 3500
 Wire Wire Line
 	5750 3300 5850 3300
@@ -266,47 +264,47 @@ NoConn ~ 3850 2800
 $Comp
 L GND #PWR03
 U 1 1 4F3C0B02
-P 1950 4900
-F 0 "#PWR03" H 1950 4900 30  0001 C CNN
-F 1 "GND" H 1950 4830 30  0001 C CNN
-	1    1950 4900
+P 2400 4900
+F 0 "#PWR03" H 2400 4900 30  0001 C CNN
+F 1 "GND" H 2400 4830 30  0001 C CNN
+	1    2400 4900
 	1    0    0    -1  
 $EndComp
 $Comp
 L +5V #PWR04
 U 1 1 4F3C0AFC
-P 2450 3400
-F 0 "#PWR04" H 2450 3490 20  0001 C CNN
-F 1 "+5V" H 2450 3490 30  0000 C CNN
-	1    2450 3400
+P 3250 3400
+F 0 "#PWR04" H 3250 3490 20  0001 C CNN
+F 1 "+5V" H 3250 3490 30  0000 C CNN
+	1    3250 3400
 	1    0    0    -1  
 $EndComp
 $Comp
 L 78L05 IC2
 U 1 1 4F3C0AE5
-P 1950 3550
-F 0 "IC2" H 2100 3354 60  0000 C CNN
-F 1 "78L05" H 1950 3750 60  0000 C CNN
-	1    1950 3550
+P 2400 3550
+F 0 "IC2" H 2550 3354 60  0000 C CNN
+F 1 "78L05" H 2400 3750 60  0000 C CNN
+	1    2400 3550
 	1    0    0    -1  
 $EndComp
 $Comp
 L GND #PWR05
 U 1 1 4F3C0A04
-P 5850 5300
-F 0 "#PWR05" H 5850 5300 30  0001 C CNN
-F 1 "GND" H 5850 5230 30  0001 C CNN
-	1    5850 5300
+P 4700 5400
+F 0 "#PWR05" H 4700 5400 30  0001 C CNN
+F 1 "GND" H 4700 5330 30  0001 C CNN
+	1    4700 5400
 	1    0    0    -1  
 $EndComp
 $Comp
 L SPST S1
 U 1 1 4F3C09DA
-P 5850 4700
-F 0 "S1" H 5850 4800 70  0000 C CNN
-F 1 "Test" H 5850 4600 70  0000 C CNN
-	1    5850 4700
-	0    -1   -1   0   
+P 5250 5150
+F 0 "S1" H 5250 5250 70  0000 C CNN
+F 1 "Test" H 5250 5050 70  0000 C CNN
+	1    5250 5150
+	1    0    0    -1  
 $EndComp
 $Comp
 L C C3
@@ -508,4 +506,75 @@ F 2 "R5" H 6750 5000 60  0001 C CNN
 	1    6750 5000
 	0    1    1    0   
 $EndComp
+$Comp
+L C C4
+U 1 1 4FFB2D64
+P 1850 4050
+F 0 "C4" H 1900 4150 50  0000 L CNN
+F 1 "330nF" H 1900 3950 50  0000 L CNN
+	1    1850 4050
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C5
+U 1 1 4FFB2D71
+P 3000 4050
+F 0 "C5" H 3050 4150 50  0000 L CNN
+F 1 "100nF" H 3050 3950 50  0000 L CNN
+	1    3000 4050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1850 3500 1850 3850
+Connection ~ 1850 3500
+Wire Wire Line
+	1850 4250 1850 4800
+Connection ~ 1850 4800
+Wire Wire Line
+	3000 3500 3000 3850
+Connection ~ 3000 3500
+Wire Wire Line
+	3000 4800 3000 4250
+$Comp
+L DIODE D1
+U 1 1 4FFB2F14
+P 1450 2950
+F 0 "D1" H 1450 3050 40  0000 C CNN
+F 1 "1N4001" H 1450 2850 40  0000 C CNN
+	1    1450 2950
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1450 2100 1450 2750
+$Comp
+L R R16
+U 1 1 4FFB3056
+P 6050 4750
+F 0 "R16" V 6130 4750 50  0000 C CNN
+F 1 "10k" V 6050 4750 50  0000 C CNN
+	1    6050 4750
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR014
+U 1 1 4FFB3063
+P 6050 4450
+F 0 "#PWR014" H 6050 4540 20  0001 C CNN
+F 1 "+5V" H 6050 4540 30  0000 C CNN
+	1    6050 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6050 4450 6050 4500
+Wire Wire Line
+	4750 5150 4700 5150
+Wire Wire Line
+	4700 5150 4700 5400
+Wire Wire Line
+	5850 4200 5850 5150
+Wire Wire Line
+	5750 5150 6050 5150
+Wire Wire Line
+	6050 5150 6050 5000
+Connection ~ 5850 5150
 $EndSCHEMATC
