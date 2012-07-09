@@ -1,4 +1,4 @@
-update=19/02/2012 14:15:39
+update=Mon 09 Jul 2012 10:26:56 PM EEST
 version=1
 last_client=cvpcb
 [general]
@@ -84,7 +84,6 @@ TxtLar=120
 MSegLar=150
 LastNetListRead=TransistorTester.net
 [pcbnew/libraries]
-LibDir=
 LibName1=sockets
 LibName2=connect
 LibName3=discret
@@ -95,8 +94,8 @@ LibName7=display
 LibName8=valves
 LibName9=led
 LibName10=dip_sockets
-LibName11=f_minibotoes
-LibName12=../KiCAD-Libraries/lowvoltage
+LibName11=../KiCAD-Libraries/lowvoltage
+LibDir=
 [cvpcb]
 version=1
 NetIExt=net

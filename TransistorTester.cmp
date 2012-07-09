@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2012-01-19 BZR 3256)-stable date = 19/02/2012 18:04:00
+Cmp-Mod V01 Created by CvPcb (2011-nov-30)-testing date = Mon 09 Jul 2012 10:33:08 PM EEST
 
 BeginCmp
 TimeStamp = /4F3C07BD;
@@ -12,6 +12,27 @@ TimeStamp = /4F3C0937;
 Reference = C3;
 ValeurCmp = 100nF;
 IdModule  = LV_C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FFB2D64;
+Reference = C4;
+ValeurCmp = 330nF;
+IdModule  = LV_C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FFB2D71;
+Reference = C5;
+ValeurCmp = 100nF;
+IdModule  = LV_C1;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FFB2F14;
+Reference = D1;
+ValeurCmp = 1N4001;
+IdModule  = LV_D4_Diode_do41;
 EndCmp
 
 BeginCmp
@@ -46,7 +67,7 @@ BeginCmp
 TimeStamp = /4F3FC610;
 Reference = J2;
 ValeurCmp = POWER;
-IdModule  = JACK_ALIM;
+IdModule  = SIL-2;
 EndCmp
 
 BeginCmp
@@ -124,6 +145,13 @@ TimeStamp = /4F411152;
 Reference = R15;
 ValeurCmp = 100R;
 IdModule  = LV_R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /4FFB3056;
+Reference = R16;
+ValeurCmp = 10k;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
