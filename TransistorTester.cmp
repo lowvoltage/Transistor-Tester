@@ -18,7 +18,7 @@ BeginCmp
 TimeStamp = /4FFB2D64;
 Reference = C4;
 ValeurCmp = 330nF;
-IdModule  = LV_C1;
+IdModule  = LV_C1-1_122;
 EndCmp
 
 BeginCmp

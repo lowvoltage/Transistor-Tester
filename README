@@ -3,10 +3,13 @@ AVR-transistor tester
 Original project by Markus Frejek
 http://www.mikrocontroller.net/articles/AVR-Transistortester
 
-KiCAD drawings by Dimitar Kovachev
+KiCAD schematic and PCB layout by Dimitar Kovachev
 
+
+Released under the Creative Commons Attribution Share-Alike 3.0 license
+http://creativecommons.org/licenses/by-sa/3.0/
 
 
 Used libraries and 3D models:
 http://www.reniemarquet.cjb.net/bibliotecas_en.html
-http://smisioto.no-ip.org/sysop/kicad.htm
+http://smisioto.no-ip.org/elettronica/kicad/kicad-en.htm

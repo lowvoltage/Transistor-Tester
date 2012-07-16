@@ -1,4 +1,4 @@
-EESchema Schematic File Version 2  date Mon 09 Jul 2012 10:21:46 PM EEST
+EESchema Schematic File Version 2  date Sun 01 Jan 2012 00:00:00 AM EEST
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -38,12 +38,12 @@ encoding utf-8
 Sheet 1 1
 Title "AVR Transistor Tester"
 Date "9 jul 2012"
-Rev "0.5"
-Comp ""
-Comment1 "Schematic and PCB design by Dimitar Kovachev"
-Comment2 "http://www.mikrocontroller.net/articles/AVR-Transistortester"
-Comment3 "Original design by Markus Frejek "
-Comment4 ""
+Rev "0.6"
+Comp "Released under the Creative Commons Attribution Share-Alike 3.0"
+Comment1 "http://lowvoltage.wordpress.com"
+Comment2 "Schematic and PCB design by Dimitar Kovachev"
+Comment3 "http://www.mikrocontroller.net/articles/AVR-Transistortester"
+Comment4 "Original design by Markus Frejek "
 $EndDescr
 Text Label 1450 2600 0    60   ~ 0
 VIN
