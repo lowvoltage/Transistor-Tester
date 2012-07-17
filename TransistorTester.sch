@@ -38,7 +38,7 @@ encoding utf-8
 Sheet 1 1
 Title "AVR Transistor Tester"
 Date "9 jul 2012"
-Rev "0.6"
+Rev "0.7"
 Comp "Released under the Creative Commons Attribution Share-Alike 3.0"
 Comment1 "http://lowvoltage.wordpress.com"
 Comment2 "Schematic and PCB design by Dimitar Kovachev"
@@ -577,4 +577,46 @@ Wire Wire Line
 Wire Wire Line
 	6050 5150 6050 5000
 Connection ~ 5850 5150
+Text Label 5850 4900 1    30   ~ 0
+TEST_BTN
+Text Label 6650 4900 0    30   ~ 0
+LCD_DB7
+Text Label 6650 4800 0    30   ~ 0
+LCD_DB6
+Text Label 6650 4700 0    30   ~ 0
+LCD_DB5
+Text Label 6650 4600 0    30   ~ 0
+LCD_DB4
+Text Label 6800 4100 0    30   ~ 0
+LCD_E
+Text Label 6850 3900 0    30   ~ 0
+LCD_RS
+Text Label 7000 3800 0    10   ~ 0
+LCD_CON
+Text Label 3850 2100 2    30   ~ 0
+RESET
+Text Label 3650 2400 0    30   ~ 0
+AREF
+Text Label 1550 3500 0    30   ~ 0
+VIN_RECT
+Text Label 7000 2800 0    30   ~ 0
+T1
+Text Label 7000 2900 0    30   ~ 0
+T2
+Text Label 7000 3000 0    30   ~ 0
+T3
+Text Label 7050 5000 2    10   ~ 0
+LCD_A
+Text Label 5900 2100 0    10   ~ 0
+RL1
+Text Label 5900 2200 0    10   ~ 0
+RH1
+Text Label 5900 2300 0    10   ~ 0
+RL2
+Text Label 5900 2400 0    10   ~ 0
+RH2
+Text Label 5750 2500 0    10   ~ 0
+RL3
+Text Label 5750 2600 0    10   ~ 0
+RH3
 $EndSCHEMATC

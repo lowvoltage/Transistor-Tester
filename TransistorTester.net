@@ -1,4 +1,4 @@
-# EESchema Netlist Version 1.1 created  Mon 09 Jul 2012 10:23:44 PM EEST
+# EESchema Netlist Version 1.1 created  Sun 01 Jan 2012 00:00:00 AM EEST
 (
  ( /4F3FC610 $noname  J2 POWER {Lib=CONN_2}
   (    1 /VIN )
@@ -9,117 +9,117 @@
   (    2 GND )
  )
  ( /4F3C1081 $noname  R11 10K {Lib=R}
-  (    1 N-000011 )
+  (    1 /VIN_RECT )
   (    2 BATT_STATUS )
  )
  ( /4F3C0AE5 $noname  IC2 78L05 {Lib=78L05}
   (  GND GND )
-  (   VI N-000011 )
+  (   VI /VIN_RECT )
   (   VO +5V )
  )
  ( /4F3C09DA $noname  S1 Test {Lib=SPST}
   (    1 GND )
-  (    2 N-000019 )
+  (    2 /TEST_BTN )
  )
  ( /4F3C0937 $noname  C3 100nF {Lib=C}
   (    1 +5V )
   (    2 GND )
  )
  ( /4F3C07BD $noname  C1 100nF {Lib=C}
-  (    1 N-000017 )
+  (    1 /AREF )
   (    2 GND )
  )
  ( /4F3C0673 $noname  R13 10K {Lib=R}
   (    1 +5V )
-  (    2 N-000008 )
+  (    2 /RESET )
  )
  ( /4F3BE68F $noname  R14 1K {Lib=R}
-  (    1 N-000009 )
+  (    1 /LCD_CON )
   (    2 GND )
  )
  ( /4F53BDBA $noname  D_LCD1 LV_1602_LCD_HD44780 {Lib=LV_1602_LCD_HD44780}
   (    1 GND )
   (    2 +5V )
-  (    3 N-000009 )
-  (    4 N-000013 )
+  (    3 /LCD_CON )
+  (    4 /LCD_RS )
   (    5 GND )
-  (    6 N-000032 )
+  (    6 /LCD_E )
   (    7 ? )
   (    8 ? )
   (    9 ? )
   (   10 ? )
-  (   11 N-000006 )
-  (   12 N-000005 )
-  (   13 N-000012 )
-  (   14 N-000031 )
-  (   15 N-000010 )
+  (   11 /LCD_DB4 )
+  (   12 /LCD_DB5 )
+  (   13 /LCD_DB6 )
+  (   14 /LCD_DB7 )
+  (   15 /LCD_A )
   (   16 GND )
  )
  ( /4F3BE25C $noname  J1 TEST_POINTS {Lib=CONN_3}
-  (    1 N-000028 )
-  (    2 N-000029 )
-  (    3 N-000030 )
+  (    1 /T1 )
+  (    2 /T2 )
+  (    3 /T3 )
  )
  ( /4F3BE12C $noname  R1 680R {Lib=R}
-  (    1 N-000020 )
-  (    2 N-000028 )
+  (    1 /RL1 )
+  (    2 /T1 )
  )
  ( /4F3BE12B $noname  R2 470K {Lib=R}
-  (    1 N-000028 )
-  (    2 N-000021 )
+  (    1 /T1 )
+  (    2 /RH1 )
  )
  ( /4F3BE035 $noname  R4 470K {Lib=R}
-  (    1 N-000029 )
-  (    2 N-000024 )
+  (    1 /T2 )
+  (    2 /RH2 )
  )
  ( /4F3BE034 $noname  R3 680R {Lib=R}
-  (    1 N-000022 )
-  (    2 N-000029 )
+  (    1 /RL2 )
+  (    2 /T2 )
  )
  ( /4F3BDC49 $noname  R5 680R {Lib=R}
-  (    1 N-000026 )
-  (    2 N-000030 )
+  (    1 /RL3 )
+  (    2 /T3 )
  )
  ( /4F3BDC44 $noname  R6 470K {Lib=R}
-  (    1 N-000030 )
-  (    2 N-000027 )
+  (    1 /T3 )
+  (    2 /RH3 )
  )
  ( /4F3BDC22 DIL28  IC1 ATMEGA8-P {Lib=ATMEGA8-P}
-  (    1 N-000008 )
-  (    2 N-000006 )
-  (    3 N-000005 )
-  (    4 N-000012 )
-  (    5 N-000031 )
-  (    6 N-000013 )
+  (    1 /RESET )
+  (    2 /LCD_DB4 )
+  (    3 /LCD_DB5 )
+  (    4 /LCD_DB6 )
+  (    5 /LCD_DB7 )
+  (    6 /LCD_RS )
   (    7 +5V )
   (    8 GND )
   (    9 ? )
   (   10 ? )
-  (   11 N-000032 )
+  (   11 /LCD_E )
   (   12 ? )
-  (   13 N-000019 )
-  (   14 N-000020 )
-  (   15 N-000021 )
-  (   16 N-000022 )
-  (   17 N-000024 )
-  (   18 N-000026 )
-  (   19 N-000027 )
+  (   13 /TEST_BTN )
+  (   14 /RL1 )
+  (   15 /RH1 )
+  (   16 /RL2 )
+  (   17 /RH2 )
+  (   18 /RL3 )
+  (   19 /RH3 )
   (   20 +5V )
-  (   21 N-000017 )
+  (   21 /AREF )
   (   22 GND )
-  (   23 N-000028 )
-  (   24 N-000029 )
-  (   25 N-000030 )
+  (   23 /T1 )
+  (   24 /T2 )
+  (   25 /T3 )
   (   26 ? )
   (   27 ? )
   (   28 BATT_STATUS )
  )
  ( /4F411152 R5  R15 100R {Lib=R}
-  (    1 N-000010 )
+  (    1 /LCD_A )
   (    2 +5V )
  )
  ( /4FFB2D64 $noname  C4 330nF {Lib=C}
-  (    1 N-000011 )
+  (    1 /VIN_RECT )
   (    2 GND )
  )
  ( /4FFB2D71 $noname  C5 100nF {Lib=C}
@@ -128,11 +128,11 @@
  )
  ( /4FFB2F14 $noname  D1 1N4001 {Lib=DIODE}
   (    1 /VIN )
-  (    2 N-000011 )
+  (    2 /VIN_RECT )
  )
  ( /4FFB3056 $noname  R16 10k {Lib=R}
   (    1 +5V )
-  (    2 N-000019 )
+  (    2 /TEST_BTN )
  )
 )
 *
@@ -252,109 +252,109 @@ $endlist
 $endfootprintlist
 }
 { Pin List by Nets
-Net 5 "" ""
- IC1 3
- D_LCD1 12
-Net 6 "" ""
- D_LCD1 11
- IC1 2
-Net 7 "GND" "GND"
- D_LCD1 1
- R14 2
- C4 2
- C5 2
- IC1 22
- IC1 8
- D_LCD1 16
- D_LCD1 5
- IC2 GND
- S1 1
- C3 2
- J2 2
- R12 2
- C1 2
-Net 8 "" ""
- IC1 1
- R13 2
-Net 9 "" ""
- D_LCD1 3
- R14 1
-Net 10 "" ""
- D_LCD1 15
- R15 1
-Net 11 "" ""
- R11 1
- IC2 VI
- D1 2
- C4 1
-Net 12 "" ""
- D_LCD1 13
- IC1 4
-Net 13 "" ""
- D_LCD1 4
- IC1 6
-Net 14 "+5V" "+5V"
- R13 1
+Net 4 "+5V" "+5V"
  D_LCD1 2
+ IC2 VO
  C3 1
+ R13 1
  R15 2
  C5 1
  R16 1
  IC1 7
  IC1 20
- IC2 VO
-Net 17 "" ""
- C1 1
- IC1 21
-Net 19 "" ""
- S1 2
- R16 2
+Net 5 "/RESET" "RESET"
+ IC1 1
+ R13 2
+Net 6 "/LCD_CON" "LCD_CON"
+ D_LCD1 3
+ R14 1
+Net 11 "/LCD_RS" "LCD_RS"
+ D_LCD1 4
+ IC1 6
+Net 12 "/TEST_BTN" "TEST_BTN"
  IC1 13
-Net 20 "" ""
+ R16 2
+ S1 2
+Net 13 "/LCD_DB7" "LCD_DB7"
+ IC1 5
+ D_LCD1 14
+Net 14 "/LCD_DB5" "LCD_DB5"
+ IC1 3
+ D_LCD1 12
+Net 15 "/RL1" "RL1"
  IC1 14
  R1 1
-Net 21 "" ""
+Net 16 "/VIN_RECT" "VIN_RECT"
+ IC2 VI
+ R11 1
+ C4 1
+ D1 2
+Net 17 "/RH1" "RH1"
  R2 2
  IC1 15
-Net 22 "" ""
+Net 18 "/RL2" "RL2"
  R3 1
  IC1 16
-Net 24 "" ""
- IC1 17
+Net 20 "/RH2" "RH2"
  R4 2
-Net 26 "" ""
- R5 1
+ IC1 17
+Net 22 "/RL3" "RL3"
  IC1 18
-Net 27 "" ""
- IC1 19
- R6 2
-Net 28 "" ""
- J1 1
- IC1 23
- R1 2
- R2 1
-Net 29 "" ""
- R3 2
- IC1 24
- R4 1
- J1 2
-Net 30 "" ""
- R5 2
- IC1 25
- R6 1
- J1 3
-Net 31 "" ""
- D_LCD1 14
- IC1 5
-Net 32 "" ""
- D_LCD1 6
- IC1 11
-Net 33 "BATT_STATUS" "BATT_STATUS"
+ R5 1
+Net 23 "BATT_STATUS" "BATT_STATUS"
  IC1 28
  R11 2
  R12 1
-Net 34 "/VIN" "VIN"
- J2 1
+Net 24 "/RH3" "RH3"
+ IC1 19
+ R6 2
+Net 25 "/LCD_A" "LCD_A"
+ R15 1
+ D_LCD1 15
+Net 26 "/T1" "T1"
+ J1 1
+ R1 2
+ R2 1
+ IC1 23
+Net 27 "/T2" "T2"
+ R4 1
+ R3 2
+ IC1 24
+ J1 2
+Net 28 "/T3" "T3"
+ IC1 25
+ J1 3
+ R6 1
+ R5 2
+Net 29 "/LCD_DB6" "LCD_DB6"
+ D_LCD1 13
+ IC1 4
+Net 30 "/LCD_DB4" "LCD_DB4"
+ D_LCD1 11
+ IC1 2
+Net 31 "/LCD_E" "LCD_E"
+ IC1 11
+ D_LCD1 6
+Net 32 "/VIN" "VIN"
  D1 1
+ J2 1
+Net 33 "/AREF" "AREF"
+ IC1 21
+ C1 1
+Net 34 "GND" "GND"
+ IC1 22
+ C1 2
+ IC1 8
+ J2 2
+ C4 2
+ D_LCD1 1
+ C3 2
+ R14 2
+ S1 1
+ C5 2
+ IC2 GND
+ R12 2
+ D_LCD1 5
+ D_LCD1 16
 }
 #End
