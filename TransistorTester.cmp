@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2011-nov-30)-testing date = Mon 09 Jul 2012 10:33:08 PM EEST
+Cmp-Mod V01 Created by CvPcb (2011-nov-30)-testing date = Sun 01 Jan 2012 00:00:00 AM EEST
 
 BeginCmp
 TimeStamp = /4F3C07BD;
@@ -36,13 +36,6 @@ IdModule  = LV_D4_Diode_do41;
 EndCmp
 
 BeginCmp
-TimeStamp = /4F53BDBA;
-Reference = D_LCD1;
-ValeurCmp = LV_1602_LCD_HD44780;
-IdModule  = LV_1602-LCD-6+6pin;
-EndCmp
-
-BeginCmp
 TimeStamp = /4F3BDC22;
 Reference = IC1;
 ValeurCmp = ATMEGA8-P;
@@ -59,91 +52,91 @@ EndCmp
 BeginCmp
 TimeStamp = /4F3BE25C;
 Reference = J1;
-ValeurCmp = TEST_POINTS;
+ValeurCmp = 3-pin_Header;
 IdModule  = SIL-3;
 EndCmp
 
 BeginCmp
-TimeStamp = /4F3FC610;
-Reference = J2;
-ValeurCmp = POWER;
-IdModule  = SIL-2;
+TimeStamp = /500B191B;
+Reference = LCD1;
+ValeurCmp = HD44780;
+IdModule  = LV_1602-LCD-6+6pin;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE12C;
 Reference = R1;
-ValeurCmp = 680R;
+ValeurCmp = 680;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE12B;
 Reference = R2;
-ValeurCmp = 470K;
+ValeurCmp = 470k;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE034;
 Reference = R3;
-ValeurCmp = 680R;
+ValeurCmp = 680;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE035;
 Reference = R4;
-ValeurCmp = 470K;
+ValeurCmp = 470k;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BDC49;
 Reference = R5;
-ValeurCmp = 680R;
+ValeurCmp = 680;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BDC44;
 Reference = R6;
-ValeurCmp = 470K;
+ValeurCmp = 470k;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C1081;
 Reference = R11;
-ValeurCmp = 10K;
+ValeurCmp = 10k;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C1083;
 Reference = R12;
-ValeurCmp = 3K3;
+ValeurCmp = 3k3;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3C0673;
 Reference = R13;
-ValeurCmp = 10K;
+ValeurCmp = 10k;
 IdModule  = LV_R5;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F3BE68F;
 Reference = R14;
-ValeurCmp = 1K;
+ValeurCmp = 1k;
 IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
 TimeStamp = /4F411152;
 Reference = R15;
-ValeurCmp = 100R;
+ValeurCmp = 100;
 IdModule  = LV_R5;
 EndCmp
 
@@ -157,7 +150,7 @@ EndCmp
 BeginCmp
 TimeStamp = /4F3C09DA;
 Reference = S1;
-ValeurCmp = Test;
+ValeurCmp = Tact_Switch;
 IdModule  = LV_WideBUTVERT;
 EndCmp
 
