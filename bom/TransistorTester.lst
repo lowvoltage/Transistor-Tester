@@ -26,8 +26,6 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 | R13        10k         
 | R14        1k          
 | R15        100         
-| R16        10k         
-| S1         Tact Switch 
 | S2         Tact Switch 
 | T1         BC547       
 | T2         BC547       
@@ -53,7 +51,6 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 | 3k3          R12       
 | 10k          R11       
 | 10k          R13       
-| 10k          R16       
 | 27k          R7        
 | 27k          R8        
 | 33k          R10       
@@ -61,7 +58,6 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 | 470k         R2        
 | 470k         R4        
 | 470k         R6        
-| Tact Switch  S1        
 | Tact Switch  S2        
 | BC547        T1        
 | BC547        T2        

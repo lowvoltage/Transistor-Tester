@@ -1,5 +1,8 @@
 AVR-transistor tester
 
+WARNING: The version-B layout is NOT compatible with the original firmawares!
+
+
 Original project by Markus Frejek
 http://www.mikrocontroller.net/articles/AVR-Transistortester
 Alternative firmware by Rene Bauer

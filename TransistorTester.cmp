@@ -25,7 +25,7 @@ BeginCmp
 TimeStamp = /4FFB2D64;
 Reference = C4;
 ValeurCmp = 330nF;
-IdModule  = LV_C1-1_112;
+IdModule  = LV_C1-1_122;
 EndCmp
 
 BeginCmp
@@ -137,7 +137,7 @@ BeginCmp
 TimeStamp = /5004370D;
 Reference = R10;
 ValeurCmp = 33k;
-IdModule  = LV_R1;
+IdModule  = LV_R4;
 EndCmp
 
 BeginCmp
@@ -173,20 +173,6 @@ TimeStamp = /4F411152;
 Reference = R15;
 ValeurCmp = 100;
 IdModule  = LV_R5;
-EndCmp
-
-BeginCmp
-TimeStamp = /4FFB3056;
-Reference = R16;
-ValeurCmp = 10k;
-IdModule  = LV_R4;
-EndCmp
-
-BeginCmp
-TimeStamp = /4F3C09DA;
-Reference = S1;
-ValeurCmp = Tact_Switch;
-IdModule  = LV_WideBUTVERT;
 EndCmp
 
 BeginCmp
