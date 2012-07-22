@@ -10,7 +10,7 @@ EnabledLayers 1FFF8001
 Links 59
 NoConn 0
 Di 13702 13540 51006 32030
-Ndraw 25
+Ndraw 24
 Ntrack 181
 Nzone 0
 BoardThickness 630
@@ -21,7 +21,7 @@ $EndGENERAL
 $SHEETDESCR
 Sheet A4 11693 8268
 Title "AVR Transistor Tester"
-Date "21 jul 2012"
+Date "22 jul 2012"
 Rev "0.8"
 Comp "Released under the Creative Commons Attribution Share-Alike 3.0"
 Comment1 "http://lowvoltage.wordpress.com"
@@ -1573,6 +1573,11 @@ Ne 1 "+5V"
 Po 0 0
 $EndPAD
 $EndMODULE 1PAD
+$TEXTPCB
+Te "lowvoltage.wordpress.com"
+Po 25500 25000 600 600 120 0
+De 21 1 0 Normal C
+$EndTEXTPCB
 $DRAWSEGMENT
 Po 0 28000 20500 31500 20500 150
 De 21 0 900 0 0
@@ -1607,17 +1612,7 @@ De 21 0 900 0 0
 $EndDRAWSEGMENT
 $TEXTPCB
 Te "Transistor Tester"
-Po 25250 24500 800 1000 120 0
-De 21 1 0 Normal C
-$EndTEXTPCB
-$TEXTPCB
-Te "+5"
-Po 25250 18000 600 600 120 0
-De 21 1 0 Normal C
-$EndTEXTPCB
-$TEXTPCB
-Te "G"
-Po 23500 18000 600 600 120 0
+Po 26000 24000 800 1000 120 0
 De 21 1 0 Normal C
 $EndTEXTPCB
 $TEXTPCB
