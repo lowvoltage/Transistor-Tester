@@ -46,7 +46,7 @@ BeginCmp
 TimeStamp = /4F3C0AE5;
 Reference = IC2;
 ValeurCmp = 78L05;
-IdModule  = LM78LXX;
+IdModule  = LV_TO92-78Lxx_oval;
 EndCmp
 
 BeginCmp
@@ -186,21 +186,21 @@ BeginCmp
 TimeStamp = /5009B544;
 Reference = T1;
 ValeurCmp = BC547;
-IdModule  = LV_TO92-123;
+IdModule  = LV_TO92-123_oval;
 EndCmp
 
 BeginCmp
 TimeStamp = /5009B4E0;
 Reference = T2;
 ValeurCmp = BC547;
-IdModule  = LV_TO92-123;
+IdModule  = LV_TO92-123_oval;
 EndCmp
 
 BeginCmp
 TimeStamp = /5009B558;
 Reference = T3;
 ValeurCmp = BC557;
-IdModule  = LV_TO92-123;
+IdModule  = LV_TO92-123_oval;
 EndCmp
 
 EndListe
