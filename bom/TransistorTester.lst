@@ -2,20 +2,25 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 
 #Cmp ( order = Reference )
 | C1         100nF       
+| C2         100nF       
 | C3         100nF       
 | C4         330nF       
 | C5         100nF       
-| D1         1N4001      
 | IC1        ATMEGA8-P   
 | IC2        78L05       
 | J1         3-pin Header
 | LCD1       HD44780     
+| LED1       RED_LED     
 | R1         680         
 | R2         470k        
 | R3         680         
 | R4         470k        
 | R5         680         
 | R6         470k        
+| R7         27k         
+| R8         27k         
+| R9         100k        
+| R10        33k         
 | R11        10k         
 | R12        3k3         
 | R13        10k         
@@ -23,18 +28,23 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 | R15        100         
 | R16        10k         
 | S1         Tact Switch 
+| S2         Tact Switch 
+| T1         BC547       
+| T2         BC547       
+| T3         BC557       
 #End Cmp
 
 #Cmp ( order = Value )
 | 100nF        C1        
+| 100nF        C2        
 | 100nF        C3        
 | 100nF        C5        
 | 330nF        C4        
-| 1N4001       D1        
 | 78L05        IC2       
 | ATMEGA8-P    IC1       
 | 3-pin Header J1        
 | HD44780      LCD1      
+| RED_LED      LED1      
 | 100          R15       
 | 680          R1        
 | 680          R3        
@@ -44,10 +54,18 @@ eeschema (2011-nov-30)-testing  >> Creation date: Sun 01 Jan 2012 00:00:00 AM EE
 | 10k          R11       
 | 10k          R13       
 | 10k          R16       
+| 27k          R7        
+| 27k          R8        
+| 33k          R10       
+| 100k         R9        
 | 470k         R2        
 | 470k         R4        
 | 470k         R6        
 | Tact Switch  S1        
+| Tact Switch  S2        
+| BC547        T1        
+| BC547        T2        
+| BC557        T3        
 #End Cmp
 
 #End List

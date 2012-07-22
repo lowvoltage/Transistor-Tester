@@ -8,6 +8,13 @@ IdModule  = LV_C1;
 EndCmp
 
 BeginCmp
+TimeStamp = /50043FD0;
+Reference = C2;
+ValeurCmp = 100nF;
+IdModule  = LV_C1;
+EndCmp
+
+BeginCmp
 TimeStamp = /4F3C0937;
 Reference = C3;
 ValeurCmp = 100nF;
@@ -18,7 +25,7 @@ BeginCmp
 TimeStamp = /4FFB2D64;
 Reference = C4;
 ValeurCmp = 330nF;
-IdModule  = LV_C1-1_122;
+IdModule  = LV_C1-1_112;
 EndCmp
 
 BeginCmp
@@ -26,13 +33,6 @@ TimeStamp = /4FFB2D71;
 Reference = C5;
 ValeurCmp = 100nF;
 IdModule  = LV_C1;
-EndCmp
-
-BeginCmp
-TimeStamp = /4FFB2F14;
-Reference = D1;
-ValeurCmp = 1N4001;
-IdModule  = LV_D4_Diode_do41;
 EndCmp
 
 BeginCmp
@@ -61,6 +61,13 @@ TimeStamp = /500B191B;
 Reference = LCD1;
 ValeurCmp = HD44780;
 IdModule  = LV_1602-LCD-6+6pin;
+EndCmp
+
+BeginCmp
+TimeStamp = /5004399D;
+Reference = LED1;
+ValeurCmp = RED_LED;
+IdModule  = LV_LED-3MM;
 EndCmp
 
 BeginCmp
@@ -103,6 +110,34 @@ TimeStamp = /4F3BDC44;
 Reference = R6;
 ValeurCmp = 470k;
 IdModule  = LV_R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /5004371C;
+Reference = R7;
+ValeurCmp = 27k;
+IdModule  = LV_R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /50043C5D;
+Reference = R8;
+ValeurCmp = 27k;
+IdModule  = LV_R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /50043FBE;
+Reference = R9;
+ValeurCmp = 100k;
+IdModule  = LV_R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /5004370D;
+Reference = R10;
+ValeurCmp = 33k;
+IdModule  = LV_R1;
 EndCmp
 
 BeginCmp
@@ -152,6 +187,34 @@ TimeStamp = /4F3C09DA;
 Reference = S1;
 ValeurCmp = Tact_Switch;
 IdModule  = LV_WideBUTVERT;
+EndCmp
+
+BeginCmp
+TimeStamp = /50043944;
+Reference = S2;
+ValeurCmp = Tact_Switch;
+IdModule  = LV_WideBUTVERT;
+EndCmp
+
+BeginCmp
+TimeStamp = /5009B544;
+Reference = T1;
+ValeurCmp = BC547;
+IdModule  = LV_TO92-123;
+EndCmp
+
+BeginCmp
+TimeStamp = /5009B4E0;
+Reference = T2;
+ValeurCmp = BC547;
+IdModule  = LV_TO92-123;
+EndCmp
+
+BeginCmp
+TimeStamp = /5009B558;
+Reference = T3;
+ValeurCmp = BC557;
+IdModule  = LV_TO92-123;
 EndCmp
 
 EndListe

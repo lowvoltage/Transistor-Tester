@@ -102,8 +102,8 @@
   (   23 /T1 )
   (   24 /T2 )
   (   25 /T3 )
-  (   26 ? )
-  (   27 ? )
+  (   26 KEEP_AWAKE )
+  (   27 TEST )
   (   28 BATT_STATUS )
  )
  ( /4F411152 R5  R15 100 {Lib=R}
@@ -118,13 +118,52 @@
   (    1 +5V )
   (    2 GND )
  )
- ( /4FFB2F14 $noname  D1 1N4001 {Lib=DIODE}
-  (    1 +9V )
-  (    2 /VIN_RECT )
- )
  ( /4FFB3056 $noname  R16 10k {Lib=R}
   (    1 +5V )
   (    2 /TEST_BTN )
+ )
+ ( /5004370D $noname  R10 33k {Lib=R}
+  (    1 +9V )
+  (    2 N-000017 )
+ )
+ ( /5004371C $noname  R7 27k {Lib=R}
+  (    1 N-000017 )
+  (    2 N-000018 )
+ )
+ ( /50043944 $noname  S2 Tact_Switch {Lib=SPST}
+  (    1 N-000002 )
+  (    2 N-000018 )
+ )
+ ( /5004399D $noname  LED1 RED_LED {Lib=LED}
+  (    1 N-000018 )
+  (    2 N-000004 )
+ )
+ ( /50043C5D $noname  R8 27k {Lib=R}
+  (    1 KEEP_AWAKE )
+  (    2 N-000003 )
+ )
+ ( /50043FBE $noname  R9 100k {Lib=R}
+  (    1 GND )
+  (    2 KEEP_AWAKE )
+ )
+ ( /50043FD0 $noname  C2 100nF {Lib=C}
+  (    1 KEEP_AWAKE )
+  (    2 GND )
+ )
+ ( /5009B4E0 TO92  T2 BC547 {Lib=BC547}
+  (    1 TEST )
+  (    2 N-000002 )
+  (    3 GND )
+ )
+ ( /5009B544 TO92  T1 BC547 {Lib=BC547}
+  (    1 N-000004 )
+  (    2 N-000003 )
+  (    3 GND )
+ )
+ ( /5009B558 TO92  T3 BC557 {Lib=BC557}
+  (    1 /VIN_RECT )
+  (    2 N-000017 )
+  (    3 +9V )
  )
 )
 *
@@ -230,10 +269,6 @@ $component C5
  C?
  C1-1
 $endlist
-$component D1
- D?
- S*
-$endlist
 $component R16
  R?
  SM0603
@@ -241,108 +276,191 @@ $component R16
  R?-*
  SM1206
 $endlist
+$component R10
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R7
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component LED1
+ LED-3MM
+ LED-5MM
+ LED-10MM
+ LED-0603
+ LED-0805
+ LED-1206
+ LEDV
+$endlist
+$component R8
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component R9
+ R?
+ SM0603
+ SM0805
+ R?-*
+ SM1206
+$endlist
+$component C2
+ SM*
+ C?
+ C1-1
+$endlist
+$component T2
+ TO92*
+$endlist
+$component T1
+ TO92*
+$endlist
+$component T3
+ TO92*
+$endlist
 $endfootprintlist
 }
 { Pin List by Nets
-Net 6 "/RESET" "RESET"
- IC1 1
- R13 2
-Net 7 "+5V" "+5V"
- IC1 20
+Net 1 "+5V" "+5V"
  R15 2
- LCD1 2
- R16 1
- R13 1
- C5 1
  IC1 7
- C3 1
+ R13 1
+ IC1 20
+ LCD1 2
  IC2 VO
-Net 8 "/LCD_CON" "LCD_CON"
- LCD1 3
- R14 1
-Net 9 "/RL3" "RL3"
- IC1 18
- R5 1
-Net 10 "/TEST_BTN" "TEST_BTN"
- IC1 13
- S1 2
- R16 2
-Net 11 "/LCD_DB7" "LCD_DB7"
- LCD1 14
- IC1 5
-Net 12 "/LCD_DB5" "LCD_DB5"
- LCD1 12
- IC1 3
-Net 13 "/LCD_RS" "LCD_RS"
- LCD1 4
- IC1 6
-Net 14 "/RL1" "RL1"
- R1 1
- IC1 14
-Net 15 "/RH1" "RH1"
- IC1 15
- R2 2
-Net 16 "/RL2" "RL2"
- R3 1
- IC1 16
-Net 17 "/RH2" "RH2"
- R4 2
- IC1 17
-Net 18 "BATT_STATUS" "BATT_STATUS"
- IC1 28
- R12 1
- R11 2
-Net 19 "/RH3" "RH3"
- IC1 19
- R6 2
-Net 20 "/LCD_A" "LCD_A"
- LCD1 15
- R15 1
-Net 21 "/VIN_RECT" "VIN_RECT"
- D1 2
- IC2 VI
- C4 1
- R11 1
-Net 22 "/T1" "T1"
- IC1 23
- R2 1
- R1 2
- J1 1
-Net 23 "/T2" "T2"
- R3 2
- IC1 24
- J1 2
- R4 1
-Net 24 "/T3" "T3"
- R5 2
- IC1 25
- J1 3
- R6 1
-Net 25 "/LCD_DB6" "LCD_DB6"
- IC1 4
- LCD1 13
-Net 26 "/LCD_DB4" "LCD_DB4"
- IC1 2
- LCD1 11
-Net 27 "/LCD_E" "LCD_E"
+ R16 1
+ C3 1
+ C5 1
+Net 2 "" ""
+ T2 2
+ S2 1
+Net 3 "" ""
+ R8 2
+ T1 2
+Net 4 "" ""
+ LED1 2
+ T1 1
+Net 6 "/LCD_E" "LCD_E"
  LCD1 6
  IC1 11
-Net 29 "/AREF" "AREF"
- C1 1
- IC1 21
-Net 30 "GND" "GND"
- LCD1 1
- IC1 8
- R12 2
- S1 1
- LCD1 16
- C4 2
- C5 2
- R14 2
+Net 9 "/LCD_DB7" "LCD_DB7"
+ IC1 5
+ LCD1 14
+Net 10 "/LCD_DB5" "LCD_DB5"
+ IC1 3
+ LCD1 12
+Net 11 "/RESET" "RESET"
+ R13 2
+ IC1 1
+Net 12 "/RH3" "RH3"
+ IC1 19
+ R6 2
+Net 13 "/RL3" "RL3"
+ IC1 18
+ R5 1
+Net 14 "TEST" "TEST"
+ IC1 27
+ T2 1
+Net 15 "GND" "GND"
+ T2 3
+ T1 3
  LCD1 5
- IC1 22
- C3 2
  IC2 GND
+ S1 1
+ C3 2
  C1 2
+ R12 2
+ LCD1 16
+ R14 2
+ LCD1 1
+ C2 2
+ IC1 22
+ IC1 8
+ R9 1
+ C5 2
+ C4 2
+Net 16 "KEEP_AWAKE" "KEEP_AWAKE"
+ IC1 26
+ C2 1
+ R9 2
+ R8 1
+Net 17 "" ""
+ R10 2
+ R7 1
+ T3 2
+Net 18 "" ""
+ S2 2
+ LED1 1
+ R7 2
+Net 19 "/VIN_RECT" "VIN_RECT"
+ R11 1
+ C4 1
+ IC2 VI
+ T3 1
+Net 20 "/LCD_RS" "LCD_RS"
+ LCD1 4
+ IC1 6
+Net 21 "/RL1" "RL1"
+ IC1 14
+ R1 1
+Net 22 "/LCD_A" "LCD_A"
+ LCD1 15
+ R15 1
+Net 23 "/AREF" "AREF"
+ IC1 21
+ C1 1
+Net 24 "/LCD_CON" "LCD_CON"
+ R14 1
+ LCD1 3
+Net 25 "/RH1" "RH1"
+ R2 2
+ IC1 15
+Net 26 "/LCD_DB6" "LCD_DB6"
+ IC1 4
+ LCD1 13
+Net 27 "/TEST_BTN" "TEST_BTN"
+ IC1 13
+ R16 2
+ S1 2
+Net 28 "/RH2" "RH2"
+ IC1 17
+ R4 2
+Net 29 "/RL2" "RL2"
+ IC1 16
+ R3 1
+Net 30 "/T1" "T1"
+ J1 1
+ R2 1
+ IC1 23
+ R1 2
+Net 31 "/T3" "T3"
+ R6 1
+ IC1 25
+ J1 3
+ R5 2
+Net 32 "/LCD_DB4" "LCD_DB4"
+ LCD1 11
+ IC1 2
+Net 33 "/T2" "T2"
+ R4 1
+ J1 2
+ R3 2
+ IC1 24
+Net 34 "BATT_STATUS" "BATT_STATUS"
+ R12 1
+ R11 2
+ IC1 28
+Net 35 "+9V" "+9V"
+ R10 1
+ T3 3
 }
 #End
