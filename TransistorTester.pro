@@ -95,6 +95,7 @@ LibName8=valves
 LibName9=led
 LibName10=dip_sockets
 LibName11=../KiCAD-Libraries/lowvoltage
+LibName12=additional/w_pin_strip
 LibDir=
 [cvpcb]
 version=1
