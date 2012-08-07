@@ -1,4 +1,4 @@
-// Oroginal Source from http://www.mikrocontroller.net/articles/AVR-Transistortester
+// Original Source from http://www.mikrocontroller.net/articles/AVR-Transistortester
 // Including some modifications from R.Bauer
 #include <avr/io.h>
 #include "lcd-routines.h"
@@ -10,39 +10,40 @@
 #include <avr/wdt.h>
 #include <math.h>
 
-/* 
-	Faktoren für die Gate-Kapazitäts-Berechnung bei N- und P-Kanal- Anreicherungs-MOSFETS
-	Diese Faktoren hängen von Fertigungstoleranzen des AVR ab und müssen somit ggf. angepasst werden
+/*
+	Factors for the gate capacity calculating at N-and P-channel enhancement type MOSFETs
+	These factors depend on manufacturing tolerances on the AVR and hence need to be adjusted, if necessary
 */
 #define N_GATE_CAPACITY_FACTOR 387
 #define P_GATE_CAPACITY_FACTOR 142
 
 /*
-	Genaue Werte der verwendeten Widerstände in Ohm.
-	Der Nennwert für R_L ist 680 Ohm, für R_H 470kOhm
-	Um das Programm auf Abweichungen von diesen Werten (z.B. durch Bauteiltoleranzen)
-	zu kalibrieren, die Widerstandswerte in Ohm in die folgenden Defines eintragen:
+	Exact values of the resistors used in ohms.
+	The face value is 680 ohms for R_L, 470kOhm for R_H
+	To use the program to deviations from these values (eg due to component tolerances)
+	To calibrate, enter the values in ohms resistance in the following defines:
 */
-#define R_L_VAL 678			//R_L; Norm	wert 680 Ohm
-#define R_H_VAL 468000UL	//R_H; Normwert 470000 Ohm, als unsigned long angeben
+#define R_L_VAL 678			//R_L; standard value 680 ohms
+#define R_H_VAL 468000UL	//R_H; 470 000 ohm standard value, specify an unsigned long
 
-//Im Programm nötige Widerstandswerte berechnen
+// The program resistor values needed to calculate
 #define RH_RL_RATIO (R_H_VAL / R_L_VAL)
 #define R_READ_RH (R_H_VAL / 100)
 
 
-/*	Faktoren für die Kapatitätsmessung bei Kondensatoren
-	Diese Faktoren hängen von Fertigungstoleranzen des AVR ab und müssen somit ggf. angepasst werden
-	H_CAPACITY_FACTOR ist für die Messung mit 470k-Widerstand (geringe Kapazität)
-	L_CAPACITY_FACTOR ist für die Messung mit 680-Ohm-Widerstand (hohe Kapazität)
-	Der gesamte Messbereich ist ca. 0,2nF bis 1000µF.
+/*
+	Factor for the case of capacitors capacity-measurement
+	These factors depend on manufacturing tolerances on the AVR and hence need to be adjusted, if necessary
+	H_CAPACITY_FACTOR is to measure with 470k resistor (low capacity)
+	L_CAPACITY_FACTOR for the measurement with 680-ohm resistor (high capacity)
+	The entire range is about 0.2 nF to 1000Î¼F
 */
 #define H_CAPACITY_FACTOR 394
 #define L_CAPACITY_FACTOR 283
 #define MCU_STATUS_REG MCUCSR
 #define UseM8
 
-//Strings im EEPROM
+// Strings in EEPROM
 unsigned char TestRunning[] EEMEM = "Teste...";
 unsigned char Bat[] EEMEM = "Bat. ";
 unsigned char BatWeak[] EEMEM = "schwach";
@@ -78,12 +79,13 @@ unsigned char mV[] EEMEM = "mV";
 unsigned char Anode[] EEMEM = "A=";
 unsigned char Gate[] EEMEM = "G=";
 unsigned char TestTimedOut[] EEMEM = "Timeout!";
-unsigned char DiodeIcon[] EEMEM = {4,31,31,14,14,4,31,4,0};	//Dioden-Icon
+unsigned char DiodeIcon[] EEMEM = {4,31,31,14,14,4,31,4,0};	//Diode-Icon
 
-unsigned char Resistor[] EEMEM = "Widerstand: ";	//nur auf Mega8 verfügbar
+unsigned char Resistor[] EEMEM = "Widerstand: ";	// only available on Mega8
 unsigned char NullDot[] EEMEM = "0,";
 unsigned char GateCap[] EEMEM = " C=";
 unsigned char Capacitor[] EEMEM = "Kondensator: ";
+
 
 struct Diode {
 	uint8_t Anode;
@@ -96,26 +98,25 @@ void DischargePin(uint8_t PinToDischarge, uint8_t DischargeDirection);
 unsigned int ReadADC(uint8_t mux);
 void GetGateThresholdVoltage(void);
 void lcd_show_format_cap(char outval[], uint8_t strlength, uint8_t CommaPos);
-void ReadCapacity(uint8_t HighPin, uint8_t LowPin);		//Kapazitätsmessung nur auf Mega8 verfügbar
+void ReadCapacity(uint8_t HighPin, uint8_t LowPin);		// capacitance measurement available only on Mega8
 
 
 #define R_DDR DDRB
 #define R_PORT PORTB
 
-/* Port für die Testwiderstände
-	Die Widerstände müssen an die unteren 6 Pins des Ports angeschlossen werden,
-	und zwar in folgender Reihenfolge:
-	RLx = 680R-Widerstand für Test-Pin x
-	RHx = 470k-Widerstand für Test-Pin x
+/*
+	Port for the test resistors
+	The resistors must be connected to the bottom of the 6-pin ports,
+	and in the following order:
+	RLx = 680R resistor for test-pin x
+	RHx = 470k resistor for test-pin x
 
-	RL1 an Pin 0
-	RH1 an Pin 1
-	RL2 an Pin 2
-	RH2 an Pin 3
-	RL3 an Pin 4
-	RH3 an Pin 5
-
-
+	RL1 at Pin 0
+	RH1 at Pin 1
+	RL2 at Pin 2
+	RH2 at Pin 3
+	RL3 at Pin 4
+	RH3 at Pin 5
 */
 
 
@@ -126,19 +127,19 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin);		//Kapazitätsmessung nur auf
 #define TP2 PC1
 #define TP3 PC2
 
-/* Port für die Test-Pins
-	Dieser Port muss über einen ADC verfügen (beim Mega8 also PORTC).
-	Für die Test-Pins müssen die unteren 3 Pins dieses Ports benutzt werden.
-	Bitte die Definitionen für TP1, TP2 und TP3 nicht ändern!
+/*  Port for the test pins
+	This port needs to have an ADC (ie when Mega8 PORTC).
+	For the test pins to the bottom of this port 3 pins are used.
+	Please do not change the definitions for TP1, TP2 and TP3!
 */
 
 #define ON_DDR DDRD
 #define ON_PORT PORTD
 #define ON_PIN_REG PIND
-#define ON_PIN PD6	//Pin, der auf high gezogen werden muss, um Schaltung in Betrieb zu halten
-#define RST_PIN PD7	//Pin, der auf low gezogen wird, wenn der Einschalt-Taster gedrückt wird
+#define ON_PIN PD6	// pin that can be drawn on high, in order to keep circuit in operation
+#define RST_PIN PD7	// pin that is pulled low when the switch button is pressed
 
-//Bauteile
+// Components
 #define PART_NONE 0
 #define PART_DIODE 1
 #define PART_TRANSISTOR 2
@@ -148,9 +149,9 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin);		//Kapazitätsmessung nur auf
 #define PART_RESISTOR 6
 #define PART_CAPACITOR 7
 
-//Ende (Bauteile)
-//Spezielle Definitionen für Bauteile
-//FETs
+// End (Components)
+// Specific definitions for components
+// FETs
 #define PART_MODE_N_E_MOS 1
 #define PART_MODE_P_E_MOS 2
 #define PART_MODE_N_D_MOS 3
@@ -166,56 +167,56 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin);		//Kapazitätsmessung nur auf
 struct Diode diodes[6];
 uint8_t NumOfDiodes;
 
-uint8_t b,c,e;		//Anschlüsse des Transistors
-unsigned long hfe;	//Verstärkungsfaktor
-uint8_t PartReady;	//Bauteil fertig erkannt
-unsigned int hfe1, hfe2;	//Verstärkungsfaktoren
+uint8_t b,c,e;		// terminals of the transistor
+unsigned long hfe;	// gain
+uint8_t PartReady;	// component detected done
+unsigned int hfe1, hfe2;	// gains
 unsigned int uBE1, uBE2;
 uint8_t PartMode;
 uint8_t tmpval, tmpval2;
 
-uint8_t ra, rb;			//Widerstands-Pins
-unsigned int rv1, rv2;	//Spannungsabfall am Widerstand
-unsigned int radcmax1, radcmax2;	//Maximal erreichbarer ADC-Wert (geringer als 1023, weil Spannung am Low-Pin bei Widerstandsmessung über Null liegt)
-uint8_t ca, cb;			//Kondensator-Pins
+uint8_t ra, rb;			// Resistance Pins
+unsigned int rv1, rv2;	// voltage drop across the resistor
+unsigned int radcmax1, radcmax2;	//maximum achievable ADC value (lower than 1023, because the voltage is low-pin for resistance measurement with zero)
+uint8_t ca, cb;			// Capacitor Pins
 unsigned long cv;
 
 
-uint8_t PartFound, tmpPartFound;	//das gefundene Bauteil
+uint8_t PartFound, tmpPartFound;	// the found component
 char outval[8];
 unsigned int adcv[4];
 uint8_t tmpval, tmpval2;
 char outval2[6];
 
-//Programmbeginn
+// Program start
 int main(void) {
-	//Einschalten
+	// Turn on
 	ON_DDR = (1<<ON_PIN);
-	ON_PORT = (1<<ON_PIN) | (1<<RST_PIN);	//Strom an und Pullup für Reset-Pin
+	ON_PORT = (1<<ON_PIN) | (1<<RST_PIN);	// pullup for power on and reset pin
 	uint8_t tmp;
-	//ADC-Init
-	ADCSRA = (1<<ADEN) | (1<<ADPS1) | (1<<ADPS0);	//Vorteiler=8
+	// Init ADC
+	ADCSRA = (1<<ADEN) | (1<<ADPS1) | (1<<ADPS0);	// prescaler = 8
 
 	lcd_init();
 
 	if(MCU_STATUS_REG & (1<<WDRF)) {	
 		/*
-		Überprüfen auf Watchdog-Reset 
-		Das tritt ein, wenn der Watchdog 2s nicht zurückgesetzt wurde
-		Kann vorkommen, wenn sich das Programm in einer Endlosschleife "verheddert" hat.
+			Check for watchdog reset
+			This occurs when the watchdog is not reset 2s
+			May occur when the program has "entangled" in a continuous loop.
 		*/
-		lcd_eep_string(TestTimedOut);	//Timeout-Meldung
+		lcd_eep_string(TestTimedOut);	// Timeout message
 		_delay_ms(3000);
-		ON_PORT = 0;	//Abschalten!
+		ON_PORT = 0;	// Switch off!
 		return 0;
 	}
-	LCDLoadCustomChar();	//Custom-Zeichen
-	//Diodensymbol in LCD laden
+	LCDLoadCustomChar();	// Custom-characters
+	// Diode symbol in LCD load
 	lcd_eep_string(DiodeIcon);
-	Line1();	//1. Zeile
-	//Einsprungspunkt, wenn Start-Taste im Betrieb erneut gedrückt wird
+	Line1();	// 1 line
+	// Entry point when the start button is pressed again during operation
 	start:
-	wdt_enable(WDTO_2S);	//Watchdog an
+	wdt_enable(WDTO_2S);	//Watchdog on
 	PartFound = PART_NONE;
 	tmpPartFound = PART_NONE;
 	NumOfDiodes = 0;
@@ -224,23 +225,23 @@ int main(void) {
 	ca = 0;
 	cb = 0;
 	lcd_clear();
-	//Versorgungsspannung messen
-	ReadADC(5 | (1<<REFS1));	//Dummy-Readout
-	hfe1 = ReadADC(5 | (1<<REFS1)); 	//mit interner Referenz
-	if (hfe1 < 650) {			//Vcc < 7,6V; Warnung anzeigen ->650
-		lcd_eep_string(Bat);		//Anzeige: "Batterie"
-		if(hfe1 < 600) {					//Vcc <7,15V; zuverlässiger Betrieb nicht mehr möglich
-			lcd_eep_string(BatEmpty);		//Batterie leer!
+	// Measure supply voltage
+	ReadADC(5 | (1<<REFS1));	// Dummy readout
+	hfe1 = ReadADC(5 | (1<<REFS1)); 	// With internal reference
+	if (hfe1 < 650) {			// VCC <7.6 V; Warning Display -> 650
+		lcd_eep_string(Bat);		// Displays: "Battery"
+		if(hfe1 < 600) {					// VCC <7.15 V, not more reliable operation possible
+			lcd_eep_string(BatEmpty);		// Battery empty!
 			_delay_ms(1000);
-			PORTD = 0;	//abschalten
+			PORTD = 0;	// Switch off
 			return 0;
 		}
-		lcd_eep_string(BatWeak);		//Batterie schwach
+		lcd_eep_string(BatWeak);		// Battery low
 		Line2();
 	}
-	//Test beginnen
-	lcd_eep_string(TestRunning);	//String: Test läuft
-	//Alle 6 Kombinationsmöglichkeiten für die 3 Pins prüfen
+	// Start test
+	lcd_eep_string(TestRunning);	//String: Test running
+	// Check all 6 possible combinations for the 3 pins
 	CheckPins(TP1, TP2, TP3);
 	CheckPins(TP1, TP3, TP2);
 	CheckPins(TP2, TP1, TP3);
@@ -248,14 +249,14 @@ int main(void) {
 	CheckPins(TP3, TP2, TP1);
 	CheckPins(TP3, TP1, TP2);
 
-	//Separate Messung zum Test auf Kondensator
+	// Separate measurements on the test capacitor
 	if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR) || (PartFound == PART_DIODE)) {
-		//Kondensator entladen; sonst ist evtl. keine Messung möglich
+		// Capacitor is discharged, is otherwise possible may not measure
 		R_PORT = 0;
 		R_DDR = (1<<(TP1 * 2)) | (1<<(TP2 * 2)) | (1<<(TP3 * 2));
 		_delay_ms(50);
 		R_DDR = 0;
-		//Kapazität in allen 6 Pin-Kompinationen messen
+		// Capacity in all 6-pin combinations measure
 		ReadCapacity(TP3, TP1);
 		ReadCapacity(TP3, TP2);
 		ReadCapacity(TP2, TP3);
@@ -264,29 +265,29 @@ int main(void) {
 		ReadCapacity(TP1, TP2);
 	}
 
-	//Fertig, jetzt folgt die Auswertung
+	// Done, now followed by the evaluation
 	GetGateThresholdVoltage();
 	lcd_clear();
 	if(PartFound == PART_DIODE) {
 		if(NumOfDiodes == 1) {
-			//Standard-Diode
+			// Standard diode
 			lcd_eep_string(Diode);	//"Diode: "
 			lcd_eep_string(Anode);
 			lcd_data(diodes[0].Anode + 49);
 			lcd_string(";K=");
 			lcd_data(diodes[0].Cathode + 49);
-			Line2();	//2. Zeile
+			Line2();	//2nd line
 			lcd_eep_string(Uf);	//"Uf = "
 			lcd_string(itoa(diodes[0].Voltage, outval, 10));
 			lcd_eep_string(mV);
 			goto end;
 		} else if(NumOfDiodes == 2) {
-		//Doppeldiode
+			// Dual diode
 			if(diodes[0].Anode == diodes[1].Anode) {
-				//Common Anode
-				lcd_eep_string(DualDiode);	//Doppeldiode
+				// Common anode
+				lcd_eep_string(DualDiode);	// Dual diode
 				lcd_string("CA");
-				Line2(); //2. Zeile
+				Line2(); //2nd line
 				lcd_eep_string(Anode);
 				lcd_data(diodes[0].Anode + 49);
 				lcd_string(";K1=");
@@ -295,10 +296,10 @@ int main(void) {
 				lcd_data(diodes[1].Cathode + 49);
 				goto end;
 			} else if(diodes[0].Cathode == diodes[1].Cathode) {
-				//Common Cathode
-				lcd_eep_string(DualDiode);	//Doppeldiode
+				// Common cathode
+				lcd_eep_string(DualDiode);	// Dual diode
 				lcd_string("CC");
-				Line2(); //2. Zeile
+				Line2(); //2nd line
 				lcd_string("K=");
 				lcd_data(diodes[0].Cathode + 49);
 				lcd_eep_string(A1);		//";A1="
@@ -307,10 +308,10 @@ int main(void) {
 				lcd_data(diodes[1].Anode + 49);
 				goto end;
 			} else if ((diodes[0].Cathode == diodes[1].Anode) && (diodes[1].Cathode == diodes[0].Anode)) {
-				//Antiparallel
-				lcd_eep_string(TwoDiodes);	//2 Dioden oder Z-Diode
+				// Antiparallel
+				lcd_eep_string(TwoDiodes);	// Two diodes or a Zener diode
 				lcd_eep_string(Antiparallel);	//Antiparallel
-				Line2(); //2. Zeile
+				Line2(); //2nd line
 				lcd_string(itoa(diodes[0].Voltage, outval, 10));
 				lcd_string(",");
 				lcd_string(itoa(diodes[1].Voltage, outval, 10));
@@ -318,12 +319,12 @@ int main(void) {
 				goto end;
 			}
 		} else if(NumOfDiodes == 3) {
-			//Serienschaltung aus 2 Dioden; wird als 3 Dioden erkannt
+			// Series connection of two diodes, is recognized as a 3 diodes
 			b = 3;
 			c = 3;
-			/* Überprüfen auf eine für eine Serienschaltung von 2 Dioden mögliche Konstellation
-				Dafür müssen 2 der Kathoden und 2 der Anoden übereinstimmen.
-				Das kommmt daher, dass die Dioden als 2 Einzeldioden und ZUSÄTZLICH als eine "große" Diode erkannt werden.
+			/*  Checking for a for a series connection of 2 diodes possible constellation
+				This requires 2 of the cathode and anode 2 of the match.
+				This is because the diodes are used as two individual diodes and ADDITIONALLY recognized as a "big" diode
 			*/
 			if((diodes[0].Anode == diodes[1].Anode) || (diodes[0].Anode == diodes[2].Anode)) b = diodes[0].Anode;
 			if(diodes[1].Anode == diodes[2].Anode) b = diodes[1].Anode;
@@ -331,9 +332,9 @@ int main(void) {
 			if((diodes[0].Cathode == diodes[1].Cathode) || (diodes[0].Cathode == diodes[2].Cathode)) c = diodes[0].Cathode;
 			if(diodes[1].Cathode == diodes[2].Cathode) c = diodes[1].Cathode;
 			if((b<3) && (c<3)) {
-				lcd_eep_string(TwoDiodes);//2 Dioden
-				Line2(); //2. Zeile
-				lcd_eep_string(InSeries); //"in Serie A="
+				lcd_eep_string(TwoDiodes);// Two diodes
+				Line2(); //2nd line
+				lcd_eep_string(InSeries); //"in series A="
 				lcd_data(b + 49);
 				lcd_string(";K=");
 				lcd_data(c + 49);
@@ -341,11 +342,11 @@ int main(void) {
 			}
 		}
 	} else if (PartFound == PART_TRANSISTOR) {
-		if(PartReady == 0) {	//Wenn 2. Prüfung nie gemacht, z.B. bei Transistor mit Schutzdiode
+		if(PartReady == 0) {	// If second Examination never made, e.g. for transistor protection diode
 			hfe2 = hfe1;
 			uBE2 = uBE1;
 		}
-		if((hfe1>hfe2)) {	//Wenn der Verstärkungsfaktor beim ersten Test höher war: C und E vertauschen!
+		if((hfe1>hfe2)) {	// If the gain was higher in the first test: C interchange and E
 			hfe2 = hfe1;
 			uBE2 = uBE1;
 			tmp = c;
@@ -364,19 +365,19 @@ int main(void) {
 		lcd_data(c + 49);
 		lcd_eep_string(estr);	//;E=
 		lcd_data(e + 49);
-		Line2(); //2. Zeile
-		//Verstärkungsfaktor berechnen
-		//hFE = Emitterstrom / Basisstrom
+		Line2(); //2nd line
+		// Calculate gain
+		// = hFE emitter current / base current
 		hfe = hfe2;
-		hfe *= RH_RL_RATIO;	//Verhältnis von High- zu Low-Widerstand
+		hfe *= RH_RL_RATIO;	// ratio of high-to low-resistance
 		if(uBE2<11) uBE2 = 11;
 		hfe /= uBE2;
 		hfe2 = (unsigned int) hfe;
 		lcd_eep_string(hfestr);	//"hFE="
 		lcd_string(utoa(hfe2, outval, 10));
-		SetCursor(2,7);			//Cursor auf Zeile 2, Zeichen 7
-		if(NumOfDiodes > 2) {	//Transistor mit Schutzdiode
-			lcd_data(LCD_CHAR_DIODE);	//Diode anzeigen
+		SetCursor(2,7);			// ursor on line 2, character 7
+		if(NumOfDiodes > 2) {	// transistor with a protection diode
+			lcd_data(LCD_CHAR_DIODE);	// display diode symbol
 		} else {
 		lcd_data(' ');
 		}
@@ -391,11 +392,11 @@ int main(void) {
 			}
 
 		goto end;
-	} else if (PartFound == PART_FET) {	//JFET oder MOSFET
-		if(PartMode&1) {	//N-Kanal
+	} else if (PartFound == PART_FET) {	//JFET or MOSFET
+		if(PartMode&1) {	//N-Channel
 			lcd_data('N');
 		} else {
-			lcd_data('P');	//P-Kanal
+			lcd_data('P');	//P-Channel
 		}
 		if((PartMode==PART_MODE_N_D_MOS) || (PartMode==PART_MODE_P_D_MOS)) {
 			lcd_eep_string(dmode);	//"-D"
@@ -409,34 +410,34 @@ int main(void) {
 			}
 		}
 
-			if(PartMode < 3) {	//Anreicherungs-MOSFET
+			if(PartMode < 3) {	// enhancement mode MOSFET
 				lcd_eep_string(GateCap);	//" C="
 				tmpval = strlen(outval2);
 				tmpval2 = tmpval;
-				if(tmpval>4) tmpval = 4;	//bei Kapazität >100nF letze Nachkommastelle nicht mehr angeben (passt sonst nicht auf das LCD)
+				if(tmpval>4) tmpval = 4;	// with capacity> 100 nF last no longer specify decimal place (otherwise not fit on the LCD)
 				lcd_show_format_cap(outval2, tmpval, tmpval2);
 				lcd_data('n');
 			}
 
-		Line2(); //2. Zeile
+		Line2(); //2nd line
 		lcd_eep_string(gds);	//"GDS="
 		lcd_data(b + 49);
 		lcd_data(c + 49);
 		lcd_data(e + 49);
-		if((NumOfDiodes > 0) && (PartMode < 3)) {	//MOSFET mit Schutzdiode; gibt es nur bei Anreicherungs-FETs
-			lcd_data(LCD_CHAR_DIODE);	//Diode anzeigen
+		if((NumOfDiodes > 0) && (PartMode < 3)) {	// MOSFET with protection diode, is there only for enhancement FETs
+			lcd_data(LCD_CHAR_DIODE);	// display diode symbol
 		} else {
-			lcd_data(' ');	//Leerzeichen
+			lcd_data(' ');	// space
 		}
-		if(PartMode < 3) {	//Anreicherungs-MOSFET
+		if(PartMode < 3) {	// enhancement mode MOSFET
 			lcd_eep_string(vt);
-			lcd_string(outval);	//Gate-Schwellspannung, wurde zuvor ermittelt
+			lcd_string(outval);	// gate threshold voltage was determined previously
 			lcd_data('m');
 		}
 		goto end;
 	} else if (PartFound == PART_THYRISTOR) {
 		lcd_eep_string(Thyristor);	//"Thyristor"
-		Line2(); //2. Zeile
+		Line2(); //2nd line
 		lcd_string("GAK=");
 		lcd_data(b + 49);
 		lcd_data(c + 49);
@@ -444,7 +445,7 @@ int main(void) {
 		goto end;
 	} else if (PartFound == PART_TRIAC) {
 		lcd_eep_string(Triac);	//"Triac"
-		Line2(); //2. Zeile
+		Line2(); //2nd line
 		lcd_eep_string(Gate);
 		lcd_data(b + 49);
 		lcd_eep_string(A1);		//";A1="
@@ -454,13 +455,13 @@ int main(void) {
 		goto end;
 
 		} else if(PartFound == PART_RESISTOR) {
-			lcd_eep_string(Resistor); //"Widerstand: "
-			lcd_data(ra + 49);	//Pin-Angaben
+			lcd_eep_string(Resistor); //"Resistor: "
+			lcd_data(ra + 49);	// Pin information
 			lcd_data('-');
 			lcd_data(rb + 49);
-			Line2(); //2. Zeile
+			Line2(); //2nd line
 			lcd_string ("R = ");
-			if(rv1>512) {		//Überprüfen, wie weit die an den Testwiderständen anliegenden Spannungen von 512 abweichen
+			if(rv1>512) {		// Check to see how far the resistance applied to the test voltages differ from 512
 				hfe1 = (rv1 - 512);
 			} else {
 				hfe1 = (512 - rv1);
@@ -472,37 +473,37 @@ int main(void) {
 			}
 			if(hfe1 > hfe2)  {
 				radcmax1 = radcmax2;
-				rv1 = rv2;	//Ergebnis verwenden, welches näher an 512 liegt (bessere Genauigkeit)
-				rv2 = R_READ_RH;	//470k-Testwiderstand
+				rv1 = rv2;	// use the result, which is closer to 512 (higher accuracy)
+				rv2 = R_READ_RH;	// 470k resistance test
 				
 			} else {
-				rv2 = R_L_VAL;	//680R-Testwiderstand
+				rv2 = R_L_VAL;	//680R resistance test
 			}
 			if(rv1==0) rv1 = 1;
 			hfe = (unsigned long)((unsigned long)((unsigned long)rv2 * (unsigned long)rv1) / (unsigned long)((unsigned long)radcmax1 - (unsigned long)rv1));	//Widerstand berechnen
 			ultoa(hfe,outval,10);
 
-			if(rv2==R_READ_RH) {	//470k-Widerstand?
-				ra = strlen(outval);	//Nötig, um Komma anzuzeigen
+			if(rv2==R_READ_RH) {	// 470k resistor?
+				ra = strlen(outval);	// Necessary to display comma
 				for(rb=0;rb<ra;rb++) {
 					lcd_data(outval[rb]);
-					if(rb==(ra-2)) lcd_data('.');	//Komma
+					if(rb==(ra-2)) lcd_data('.');	// Comma
 				}
-				lcd_data ('k'); //Kilo-Ohm, falls 470k-Widerstand verwendet
+				lcd_data ('k'); // kilo-ohms, if 470k resistor is used
 			} else {
 				lcd_string(outval);
 			}
-			lcd_data(LCD_CHAR_OMEGA);	//Omega für Ohm 
+			lcd_data(LCD_CHAR_OMEGA);	//Omega for Ohm
 			goto end;
 
-		} else if(PartFound == PART_CAPACITOR) {	//Kapazitätsmessung auch nur auf Mega8 verfügbar
+		} else if(PartFound == PART_CAPACITOR) {	// capacity measurement only available on Mega8
 			lcd_eep_string(Capacitor);
-			lcd_data(ca + 49);	//Pin-Angaben
+			lcd_data(ca + 49);	// Pin information
 			lcd_data('-');
 			lcd_data(cb + 49);
-			Line2(); //2. Zeile
+			Line2(); //2nd line
 			tmpval2 = 'n';
-			if(cv > 99999) {	//ab 1µF
+			if(cv > 99999) {	// Above 1ÂµF
 				cv /= 1000;
 				tmpval2 = LCD_CHAR_U;
 			}
@@ -515,40 +516,40 @@ int main(void) {
 	}
 
 		if(NumOfDiodes == 0) {
-			//Keine Dioden gefunden
-			lcd_eep_string(TestFailed1); //"Kein,unbek. oder"
-			Line2(); //2. Zeile
-			lcd_eep_string(TestFailed2); //"defektes "
+			// No diodes found
+			lcd_eep_string(TestFailed1); // "No, unknown, or"
+			Line2(); //2nd line
+			lcd_eep_string(TestFailed2); // "deffective "
 			lcd_eep_string(Bauteil);
 		} else {
 			lcd_eep_string(Bauteil);
-			lcd_eep_string(Unknown); //" unbek."
-			Line2(); //2. Zeile
-			lcd_eep_string(OrBroken); //"oder defekt"
+			lcd_eep_string(Unknown); //" unknown."
+			Line2(); //2nd line
+			lcd_eep_string(OrBroken); //" or deffective"
 			lcd_data(NumOfDiodes + 48);
 			lcd_data('d');
 		}
 
 	end:
-	while(!(ON_PIN_REG & (1<<RST_PIN)));		//warten ,bis Taster losgelassen
+	while(!(ON_PIN_REG & (1<<RST_PIN)));		// wait until you release button
 	_delay_ms(200);
 	for(hfe1 = 0;hfe1<10000;hfe1++) {
 		if(!(ON_PIN_REG & (1<<RST_PIN))) {
-			/*Wenn der Taster wieder gedrückt wurde...
-			wieder zum Anfang springen und neuen Test durchführen
+			/*
+			 If the button was pressed again ...
+			 jump back to the beginning and perform new test
 			*/
 			goto start;
 		}
 		wdt_reset();
 		_delay_ms(1);
 	}
-	ON_PORT &= ~(1<<ON_PIN);	//Abschalten
-	wdt_disable();	//Watchdog aus
-	//Endlosschleife
+	ON_PORT &= ~(1<<ON_PIN);	// shutdown
+	wdt_disable();	//Watchdog off
+	// Infinite loop
 	while(1) {
 		if(!(ON_PIN_REG & (1<<RST_PIN))) {	
-			/* wird nur erreicht,
-		 	wenn die automatische Abschaltung nicht eingebaut wurde */
+			/* Can only be achieved when the automatic switch-off has not been installed */
 			goto start;
 		}
 	}
@@ -557,58 +558,58 @@ int main(void) {
 
 void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 	/*
-	Funktion zum Testen der Eigenschaften des Bauteils bei der angegebenen Pin-Belegung
-	Parameter:
-	HighPin: Pin, der anfangs auf positives Potenzial gelegt wird
-	LowPin: Pin, der anfangs auf negatives Potenzial gelegt wird
-	TristatePin: Pin, der anfangs offen gelassen wird
+		Function to test the properties of the component at the specified pin assignments
+		parameters:
+		HighPin: pin, which is initially set at a positive potential
+		LowPin: pin, which is initially set at a negative potential
+		TristatePin: pin, which is initially left open
 
-	Im Testverlauf wird TristatePin natürlich auch positiv oder negativ geschaltet.
+		During testing TristatePin will of course also be connected positively or negatively
 	*/
 	unsigned int adcv[6];
 	uint8_t tmpval, tmpval2;
 	/*
-		HighPin wird fest auf Vcc gelegt
-		LowPin wird über R_L auf GND gelegt
-		TristatePin wird hochohmig geschaltet, dafür ist keine Aktion nötig
+		HighPin is placed firmly on Vcc
+		LowPin is placed over R_L to GND
+		TristatePin is switched to high, but no action is required
 	*/
 	wdt_reset();
-	//Pins setzen
-	tmpval = (LowPin * 2);			//nötig wegen der Anordnung der Widerstände
-	R_DDR = (1<<tmpval);			//Low-Pin auf Ausgang und über R_L auf Masse
+	// Set pins
+	tmpval = (LowPin * 2);			// required because of the arrangement of the resistors
+	R_DDR = (1<<tmpval);			// Low-Pin as output over R_L to ground
 	R_PORT = 0;
-	ADC_DDR = (1<<HighPin);			//High-Pin auf Ausgang
-	ADC_PORT = (1<<HighPin);		//High-Pin fest auf Vcc
+	ADC_DDR = (1<<HighPin);			// High-Pin as output
+	ADC_PORT = (1<<HighPin);		// High-pin fixed to Vcc
 	_delay_ms(5);
-	//Bei manchen MOSFETs muss das Gate (TristatePin) zuerst entladen werden
-	//N-Kanal:
+	// Some MOSFETs must have gate (TristatePin) first discharge
+	// N-channel:
 	DischargePin(TristatePin,0);
-	//Spannung am Low-Pin ermitteln
+	// Voltage at Low-Pin determined
 	adcv[0] = ReadADC(LowPin);
-	if(adcv[0] < 20) goto next;	//Sperrt das Bauteil jetzt?
-	//sonst: Entladen für P-Kanal (Gate auf Plus)
+	if(adcv[0] < 20) goto next;	// Lock the device now?
+	// else: for P-channel discharge (gate to plus)
 	DischargePin(TristatePin,1);
-	//Spannung am Low-Pin ermitteln
+	// Voltage at Low-Pin determined
 	adcv[0] = ReadADC(LowPin);
 
 	next:
-	if(adcv[0] < 20) {	//Wenn das Bauteil keinen Durchgang zwischen HighPin und LowPin hat
-		tmpval = (TristatePin * 2);		//nötig wegen der Anordnung der Widerstände
-		R_DDR |= (1<<tmpval);			//Tristate-Pin über R_L auf Masse
+	if(adcv[0] < 20) {	// If the component has no continuity between HighPin and LowPin
+		tmpval = (TristatePin * 2);		// required because of the arrangement of the resistors
+		R_DDR |= (1<<tmpval);			// TristatePin to ground over R_L
 		_delay_ms(2);
-		adcv[0] = ReadADC(LowPin);		//Spannung messen
+		adcv[0] = ReadADC(LowPin);		// Measure voltage
 		if(adcv[0] > 700) {
-			//Bauteil leitet => pnp-Transistor o.ä.
-			//Verstärkungsfaktor in beide Richtungen messen
-			R_DDR &= ~(1<<tmpval);		//Tristate-Pin (Basis) hochohmig
+			// Component passes => pnp transistor, etc.
+			// Gain measured in both directions
+			R_DDR &= ~(1<<tmpval);		// Tristate-Pin (Base) high impedance
 			tmpval++;
-			R_DDR |= (1<<tmpval);		//Tristate-Pin (Basis) über R_H auf Masse
+			R_DDR |= (1<<tmpval);		// Tristate-Pin (Base) to ground over R_H
 
 			_delay_ms(10);
-			adcv[0] = ReadADC(LowPin);		//Spannung am Low-Pin (vermuteter Kollektor) messen
-			adcv[2] = ReadADC(TristatePin);	//Basisspannung messen
-			R_DDR &= ~(1<<tmpval);		//Tristate-Pin (Basis) hochohmig
-			//Prüfen, ob Test schon mal gelaufen
+			adcv[0] = ReadADC(LowPin);		// Measure voltage at Low-Pin (collector suspected)
+			adcv[2] = ReadADC(TristatePin);	// Measure base voltage
+			R_DDR &= ~(1<<tmpval);		// Tristate-Pin (Base) high impedance
+			// Check that test run ever
 			if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {
 				PartReady = 1;
 				hfe2 = adcv[0];
@@ -619,12 +620,12 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 			}
 			if(adcv[2] > 200) {
 				if(PartFound != PART_THYRISTOR) {
-					PartFound = PART_TRANSISTOR;	//PNP-Transistor gefunden (Basis wird "nach oben" gezogen)
+					PartFound = PART_TRANSISTOR;	// PNP transistor found (Base is pulled "up")
 					PartMode = PART_MODE_PNP;
 				}
 			} else {
 				if(PartFound != PART_THYRISTOR) {
-				 	PartFound = PART_FET;			//P-Kanal-MOSFET gefunden (Basis/Gate wird NICHT "nach oben" gezogen)
+				 	PartFound = PART_FET;			// P-Channel-MOSFET found (Base/Gate is NOT pulled "up")
 					PartMode = PART_MODE_P_E_MOS;
 				}
 			}
@@ -635,38 +636,39 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 			}
 		}
 
-		//Tristate (vermutete Basis) auf Plus, zum Test auf npn
-		ADC_PORT = 0;					//Low-Pin fest auf Masse
-		tmpval = (TristatePin * 2);		//nötig wegen der Anordnung der Widerstände
-		tmpval2 = (HighPin * 2);		//nötig wegen der Anordnung der Widerstände
-		R_DDR = (1<<tmpval) | (1<<tmpval2);			//High-Pin und Tristate-Pin auf Ausgang
-		R_PORT = (1<<tmpval) | (1<<tmpval2);		//High-Pin und Tristate-Pin über R_L auf Vcc
-		ADC_DDR = (1<<LowPin);			//Low-Pin auf Ausgang
+		// Tristate Pin (assumed base) set HIGH, to test for npn
+		ADC_PORT = 0;					// Low-Pin fixed to ground
+		tmpval = (TristatePin * 2);		// required because of the arrangement of the resistors
+		tmpval2 = (HighPin * 2);		// required because of the arrangement of the resistors
+		R_DDR = (1<<tmpval) | (1<<tmpval2);			// High-Pin and Tristate-Pin as outputs
+		R_PORT = (1<<tmpval) | (1<<tmpval2);		// High-Pin and Tristate-Pin over R_L to Vcc
+		ADC_DDR = (1<<LowPin);			// Low-Pin as output
 		_delay_ms(10);
-		adcv[0] = ReadADC(HighPin);		//Spannung am High-Pin messen
+		adcv[0] = ReadADC(HighPin);		// Measure voltage at High-Pin
 		if(adcv[0] < 500) {
 			if(PartReady==1) goto testend;
-			//Bauteil leitet => npn-Transistor o.ä.
+			// Component passes => NPN transistor etc.
 
-			//Test auf Thyristor:
-			//Gate entladen
+			// Test on thyristor:
+			// Unload gate
+
 			
-			R_PORT &= ~(1<<tmpval);			//Tristate-Pin (Gate) über R_L auf Masse
+			R_PORT &= ~(1<<tmpval);			// Tristate-Pin (Gate) over R_L to ground
 			_delay_ms(10);
-			R_DDR &= ~(1<<tmpval);			//Tristate-Pin (Gate) hochohmig
-			//Test auf Thyristor
+			R_DDR &= ~(1<<tmpval);			// Tristate-Pin (Gate) high impedance
+			//Test on Thyristor
 			_delay_ms(5);
-			adcv[1] = ReadADC(HighPin);		//Spannung am High-Pin (vermutete Anode) erneut messen
+			adcv[1] = ReadADC(HighPin);		// Measure voltage at High-Pin (assumed anode)
 			
-			R_PORT &= ~(1<<tmpval2);	//High-Pin (vermutete Anode) auf Masse
+			R_PORT &= ~(1<<tmpval2);	// High-Pin (anode suspected) to ground
 			_delay_ms(10);
-			R_PORT |= (1<<tmpval2);	//High-Pin (vermutete Anode) wieder auf Plus
+			R_PORT |= (1<<tmpval2);	// High-Pin (anode suspected) to positive rail
 			_delay_ms(5);
-			adcv[2] = ReadADC(HighPin);		//Spannung am High-Pin (vermutete Anode) erneut messen
-			if((adcv[1] < 500) && (adcv[2] > 900)) {	//Nach Abschalten des Haltestroms muss der Thyristor sperren
-				//war vor Abschaltung des Triggerstroms geschaltet und ist immer noch geschaltet obwohl Gate aus => Thyristor
+			adcv[2] = ReadADC(HighPin);		// Measure the voltage at High-Pin (anode suspected) again
+			if((adcv[1] < 500) && (adcv[2] > 900)) {	//Lock after switching off the holding current, the thyristor
+				// in front of the trigger current disconnection was activated and is still connected even though gate off => thyristor
 				if(PartFound == PART_THYRISTOR) {
-					PartFound = PART_TRIAC;	//Dieses Ergebnis schon einmal dagewesen => Triac (Doppelthyristor)
+					PartFound = PART_TRIAC;	// This result been there once before => triac (Dual-thyristor)
 					PartReady = 1;
 					goto saveresult;
 				} else {
@@ -674,17 +676,17 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 					goto saveresult;
 				}
 			}
-			//Test auf Transistor oder MOSFET
+			// Test for transistor or MOSFET
 			tmpval++;
-			R_DDR |= (1<<tmpval);		//Tristate-Pin (Basis) auf Ausgang
-			R_PORT |= (1<<tmpval);		//Tristate-Pin (Basis) über R_H auf Plus
+			R_DDR |= (1<<tmpval);		// Tristate-Pin (Base) as output
+			R_PORT |= (1<<tmpval);		// Tristate-Pin (Basis) over R_H to positive rail
 			_delay_ms(50);
-			adcv[0] = ReadADC(HighPin);		//Spannung am High-Pin (vermuteter Kollektor) messen
-			adcv[2] = ReadADC(TristatePin);	//Basisspannung messen
-			R_PORT &= ~(1<<tmpval);			//Tristate-Pin (Basis) hochohmig
-			R_DDR &= ~(1<<tmpval);			//Tristate-Pin (Basis) auf Eingang
+			adcv[0] = ReadADC(HighPin);		// Measure voltage at High-Pin (collector suspected)
+			adcv[2] = ReadADC(TristatePin);	// Measure voltage at base
+			R_PORT &= ~(1<<tmpval);			// Tristate-Pin (Base) high impedance
+			R_DDR &= ~(1<<tmpval);			// Tristate-Pin (Base) as input
 
-			if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {	//prüfen, ob Test schon mal gelaufen
+			if((PartFound == PART_TRANSISTOR) || (PartFound == PART_FET)) {	// heck whether the test run ever
 				PartReady = 1;
 				hfe2 = 1023 - adcv[0];
 				uBE2 = 1023 - adcv[2];
@@ -693,10 +695,10 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 				uBE1 = 1023 - adcv[2];
 			}
 			if(adcv[2] < 500) {
-				PartFound = PART_TRANSISTOR;	//NPN-Transistor gefunden (Basis wird "nach unten" gezogen)
+				PartFound = PART_TRANSISTOR;	// NPN transistor found (base is pulled "down")
 				PartMode = PART_MODE_NPN;
 			} else {
-				PartFound = PART_FET;			//N-Kanal-MOSFET gefunden (Basis/Gate wird NICHT "nach unten" gezogen)
+				PartFound = PART_FET;			// N-Channel-MOSFET found (Base/Gate is NOT pulled "down")
 				PartMode = PART_MODE_N_E_MOS;
 			}
 			saveresult:
@@ -706,30 +708,30 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 		}
 		ADC_DDR = 0;
 		ADC_PORT = 0;
-		//Fertig
-	} else {	//Durchgang
-		//Test auf N-JFET oder selbstleitenden N-MOSFET
-		R_DDR |= (2<<(TristatePin*2));	//Tristate-Pin (vermutetes Gate) über R_H auf Masse
+		// Done
+	} else {	// Passage
+		// Test for N-JFET or self conducting N-MOSFET
+		R_DDR |= (2<<(TristatePin*2));	// Tristate-Pin (presumed Gate) over R_H to ground
 		_delay_ms(20);
-		adcv[0] = ReadADC(LowPin);		//Spannung am vermuteten Source messen
-		R_PORT |= (2<<(TristatePin*2));	//Tristate-Pin (vermutetes Gate) über R_H auf Plus
+		adcv[0] = ReadADC(LowPin);		// Measure the voltage at the suspected source
+		R_PORT |= (2<<(TristatePin*2));	// Tristate-Pin (presumed Gate) over R_H to Plus
 		_delay_ms(20);
-		adcv[1] = ReadADC(LowPin);		//Spannung am vermuteten Source erneut messen
-		//Wenn es sich um einen selbstleitenden MOSFET oder JFET handelt, müsste adcv[1] > adcv[0] sein
+		adcv[1] = ReadADC(LowPin);		// Measure the voltage at the suspected source
+		// If there is a self-conducting MOSFET or JFET would, ADCV [1]> ADCV [0] be
 		if(adcv[1]>(adcv[0]+100)) {
-			//Spannung am Gate messen, zur Unterscheidung zwischen MOSFET und JFET
+			// Measure voltage at the gate, to distinguish between the MOSFET and JFET
 			ADC_PORT = 0;
-			ADC_DDR = (1<<LowPin);	//Low-Pin fest auf Masse
-			tmpval = (HighPin * 2);		//nötig wegen der Anordnung der Widerstände
-			R_DDR |= (1<<tmpval);			//High-Pin auf Ausgang
-			R_PORT |= (1<<tmpval);			//High-Pin über R_L auf Vcc
+			ADC_DDR = (1<<LowPin);		// Low-Pin fixed to ground
+			tmpval = (HighPin * 2);		// required because of the arrangement of the resistors
+			R_DDR |= (1<<tmpval);			// High-Pin as output
+			R_PORT |= (1<<tmpval);			// High-Pin over R_L to Vcc
 			_delay_ms(20);
-			adcv[2] = ReadADC(TristatePin);		//Spannung am vermuteten Gate messen
+			adcv[2] = ReadADC(TristatePin);		// Measure the voltage at the suspected gate
 			if(adcv[2]>800) {	//MOSFET
-				PartFound = PART_FET;			//N-Kanal-MOSFET
-				PartMode = PART_MODE_N_D_MOS;	//Verarmungs-MOSFET
-			} else {	//JFET (pn-Übergang zwischen G und S leitet)
-				PartFound = PART_FET;			//N-Kanal-JFET
+				PartFound = PART_FET;			// N-Channel-MOSFET
+				PartMode = PART_MODE_N_D_MOS;	// depletion-mode-MOSFET
+			} else {	// JFET (pn junction between the G and S conducts)
+				PartFound = PART_FET;			//N-Channel-JFET
 				PartMode = PART_MODE_N_JFET;
 			}
 			PartReady = 1;
@@ -739,27 +741,27 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 		}
 		ADC_PORT = 0;
 
-		//Test auf P-JFET oder selbstleitenden P-MOSFET
-		ADC_DDR = (1<<LowPin);	//Low-Pin (vermuteter Drain) fest auf Masse, Tristate-Pin (vermutetes Gate) ist noch über R_H auf Plus
-		tmpval = (HighPin * 2);			//nötig wegen der Anordnung der Widerstände
-		R_DDR |= (1<<tmpval);			//High-Pin auf Ausgang
-		R_PORT |= (1<<tmpval);			//High-Pin über R_L auf Vcc
+		// Test for P-JFET or self-conducting P-MOSFET
+		ADC_DDR = (1<<LowPin);	// Low-Pin (suspected drain) set to ground, Tristate-Pin (presumed gate) is still over R_H to Plus
+		tmpval = (HighPin * 2);			// required because of the arrangement of the resistors
+		R_DDR |= (1<<tmpval);			// High-Pin as output
+		R_PORT |= (1<<tmpval);			// High-Pin over R_L to Vcc
 		_delay_ms(20);
-		adcv[0] = ReadADC(HighPin);		//Spannung am vermuteten Source messen
-		R_PORT &= ~(2<<(TristatePin*2));	//Tristate-Pin (vermutetes Gate) über R_H auf Masse
+		adcv[0] = ReadADC(HighPin);		// Measure the voltage at the suspected source
+		R_PORT &= ~(2<<(TristatePin*2));	// Tristate-Pin (suspected Gate) over R_H to ground
 		_delay_ms(20);
-		adcv[1] = ReadADC(HighPin);		//Spannung am vermuteten Source erneut messen
-		//Wenn es sich um einen selbstleitenden P-MOSFET oder P-JFET handelt, müsste adcv[0] > adcv[1] sein
+		adcv[1] = ReadADC(HighPin);		// Measure the voltage at the suspected source again
+		// If there is a self-conducting P-MOSFET or JFET would, ADCV [0]> ADCV [1] have
 		if(adcv[0]>(adcv[1]+100)) {
-			//Spannung am Gate messen, zur Unterscheidung zwischen MOSFET und JFET
-			ADC_PORT = (1<<HighPin);	//High-Pin fest auf Plus
-			ADC_DDR = (1<<HighPin);		//High-Pin auf Ausgang
+			// Measure voltage at the gate, to distinguish between the MOSFET and JFET
+			ADC_PORT = (1<<HighPin);	// High-Pin set to Plus
+			ADC_DDR = (1<<HighPin);		// High-Pin as output
 			_delay_ms(20);
-			adcv[2] = ReadADC(TristatePin);		//Spannung am vermuteten Gate messen
-			if(adcv[2]<200) {	//MOSFET
-				PartFound = PART_FET;			//P-Kanal-MOSFET
-				PartMode = PART_MODE_P_D_MOS;	//Verarmungs-MOSFET
-			} else {	//JFET (pn-Übergang zwischen G und S leitet)
+			adcv[2] = ReadADC(TristatePin);		// Measure the voltage at the suspected gate
+			if(adcv[2]<200) {	// MOSFET
+				PartFound = PART_FET;			// P-Channel-MOSFET
+				PartMode = PART_MODE_P_D_MOS;	// depletion-mode MOSFET
+			} else {	// JFET (pn junction between the G and S conducts)
 				PartFound = PART_FET;			//P-Kanal-JFET
 				PartMode = PART_MODE_P_JFET;
 			}
@@ -772,44 +774,45 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 		tmpval2 = (2<<(2*HighPin));	//R_H
 		tmpval = (1<<(2*HighPin));	//R_L
 		ADC_PORT = 0;
-		//Test auf Diode
-		ADC_DDR = (1<<LowPin);	//Low-Pin fest auf Masse, High-Pin ist noch über R_L auf Vcc
-		DischargePin(TristatePin,1);	//Entladen für P-Kanal-MOSFET
+		// Test for diode
+		ADC_DDR = (1<<LowPin);	// Low-Pin to ground, High-Pin is still over R_L to Vcc
+		DischargePin(TristatePin,1);	// Discharge for P-Channel MOSFET
 		_delay_ms(5);
 		adcv[0] = ReadADC(HighPin) - ReadADC(LowPin);
-		R_DDR = tmpval2;	//High-Pin über R_H auf Plus
+		R_DDR = tmpval2;	// High-Pin over R_H to Plus
 		R_PORT = tmpval2;
 		_delay_ms(5);
 		adcv[2] = ReadADC(HighPin) - ReadADC(LowPin);
-		R_DDR = tmpval;	//High-Pin über R_L auf Plus
+		R_DDR = tmpval;	// High-Pin over R_L auf Plus
 		R_PORT = tmpval;
-		DischargePin(TristatePin,0);	//Entladen für N-Kanal-MOSFET
+		DischargePin(TristatePin,0);	// Discharge for N-Channel MOSFET
 		_delay_ms(5);
 		adcv[1] = ReadADC(HighPin) - ReadADC(LowPin);
-		R_DDR = tmpval2;	//High-Pin über R_H  auf Plus
+		R_DDR = tmpval2;	// High-Pin over R_H to Plus
 		R_PORT = tmpval2;
 		_delay_ms(5);
 		adcv[3] = ReadADC(HighPin) - ReadADC(LowPin);
-		/*Ohne das Entladen kann es zu Falscherkennungen kommen, da das Gate eines MOSFETs noch geladen sein kann.
-			Die zusätzliche Messung mit dem "großen" Widerstand R_H wird durchgeführt, um antiparallele Dioden von
-			Widerständen unterscheiden zu können.
-			Eine Diode hat eine vom Durchlassstrom relativ unabhängige Durchlassspg.
-			Bei einem Widerstand ändert sich der Spannungsabfall stark (linear) mit dem Strom.
+		/*
+			Can without unloading it in false detections, because the gate of a MOSFET can still be charged.
+			The additional measurement with the "big" R_H resistance is carried out to anti-parallel diode of
+			Different resistances to.
+			A diode has a forward current of relatively independent Durchlassspg.
+			With a resistance, the voltage drop changes greatly (linear) with the current.
 		*/
 		if(adcv[0] > adcv[1]) {
-			adcv[1] = adcv[0];	//der höhere Wert gewinnt
+			adcv[1] = adcv[0];	// the higher value wins
 			adcv[3] = adcv[2];
 		}
 
-		if((adcv[1] > 30) && (adcv[1] < 950)) { //Spannung liegt über 0,15V und unter 4,64V => Ok
-			if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) PartFound = PART_DIODE;	//Diode nur angeben, wenn noch kein anderes Bauteil gefunden wurde. Sonst gäbe es Probleme bei Transistoren mit Schutzdiode
+		if((adcv[1] > 30) && (adcv[1] < 950)) { // voltage is above 0.15 V and 4.64 V => OK
+			if((PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) PartFound = PART_DIODE;	// specify diode only if no other component was found. Otherwise there would be problems in transistors with protection diode
 			diodes[NumOfDiodes].Anode = HighPin;
 			diodes[NumOfDiodes].Cathode = LowPin;
-			diodes[NumOfDiodes].Voltage = (adcv[1]*52/11);	// ca. mit 4,9 multiplizieren, um aus dem ADC-Wert die Spannung in Millivolt zu erhalten
+			diodes[NumOfDiodes].Voltage = (adcv[1]*52/11);	// multiply the value from the ADC approximately by 4.9 to obtain the voltage in millivolts
 			NumOfDiodes++;
 			for(uint8_t i=0;i<NumOfDiodes;i++) {
-				if((diodes[i].Anode == LowPin) && (diodes[i].Cathode == HighPin)) {	//zwei antiparallele Dioden: Defekt oder Duo-LED
-					if((adcv[3]*64) < (adcv[1] / 5)) {	//Durchlassspannung fällt bei geringerem Teststrom stark ab => Defekt
+				if((diodes[i].Anode == LowPin) && (diodes[i].Cathode == HighPin)) {	// two antiparallel diodes: Defect or duo-LED
+					if((adcv[3]*64) < (adcv[1] / 5)) {	// forward voltage drops sharply at lower test current => defect
 						if(i<NumOfDiodes) {
 							for(uint8_t j=i;j<(NumOfDiodes-1);j++) {
 								diodes[j].Anode = diodes[j+1].Anode;
@@ -824,40 +827,40 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 		}
 	}
 
-		//Test auf Widerstand
+		// Test for resistor
 		tmpval2 = (2<<(2*HighPin));	//R_H
 		tmpval = (1<<(2*HighPin));	//R_L
 		ADC_PORT = 0;
-		ADC_DDR = (1<<LowPin);	//Low-Pin fest auf Masse
-		R_DDR = tmpval;	//High-Pin über R_L auf Plus
+		ADC_DDR = (1<<LowPin);	// Low-Pin set to ground
+		R_DDR = tmpval;			// High-Pin over R_L to Plus
 		R_PORT = tmpval;
 		adcv[2] = ReadADC(LowPin);
 		adcv[0] = ReadADC(HighPin) - adcv[2];
-		R_DDR = tmpval2;	//High-Pin über R_H auf Plus
+		R_DDR = tmpval2;		//High-Pin over R_H to Plus
 		R_PORT = tmpval2;
 		adcv[3] = ReadADC(LowPin);
 		adcv[1] = ReadADC(HighPin) - adcv[3];
 
-		//Messung der Spannungsdifferenz zwischen dem Pluspol von R_L und R_H und Vcc
+		// Measure the voltage difference between the positive pole of R_L and R_H and Vcc
 		tmpval2 = (2<<(2*LowPin));	//R_H
 		tmpval = (1<<(2*LowPin));	//R_L
-		ADC_DDR = (1<<HighPin);		//High-Pin auf Ausgang
-		ADC_PORT = (1<<HighPin);	//High-Pin fest auf Plus
+		ADC_DDR = (1<<HighPin);		// High-Pin as output
+		ADC_PORT = (1<<HighPin);	// High-Pin set to Plus
 		R_PORT = 0;
-		R_DDR = tmpval;				//Low-Pin über R_L auf Masse
+		R_DDR = tmpval;				// Low-Pin over R_L to ground
 		adcv[2] += (1023 - ReadADC(HighPin));
-		R_DDR = tmpval2;				//Low-Pin über R_H auf Masse
+		R_DDR = tmpval2;				// Low-Pin over R_H to ground
 		adcv[3] += (1023 - ReadADC(HighPin));
 		
-		if(((adcv[0] - adcv[2]) < 900) && ((adcv[1] - adcv[3]) > 20)) goto testend; 	//Spannung fällt bei geringem Teststrom nicht weit genug ab
-		if(((adcv[1] * 32) / 31) < adcv[0]) {	//Abfallende Spannung fällt bei geringerem Teststrom stark ab und es besteht kein "Beinahe-Kurzschluss" => Widerstand
+		if(((adcv[0] - adcv[2]) < 900) && ((adcv[1] - adcv[3]) > 20)) goto testend; 	// Voltage drops and low current test does not go far enough
+		if(((adcv[1] * 32) / 31) < adcv[0]) {	// Falling voltage drops sharply at lower test current and there is no "near-short" => Resistance
 			if((PartFound == PART_DIODE) || (PartFound == PART_NONE) || (PartFound == PART_RESISTOR)) {
 				if((tmpPartFound == PART_RESISTOR) && (ra == LowPin) && (rb == HighPin)) {
-					/* Das Bauteil wurde schon einmal mit umgekehrter Polarität getestet.
-					Jetzt beide Ergebnisse miteinander vergleichen. Wenn sie recht ähnlich sind,
-					handelt es sich (höchstwahrscheinlich) um einen Widerstand. */
+					/* 	The device was tested once before with reversed polarity.
+						Now compare the two results together. If they are quite similar,
+						it is (most likely) by a resistor. */
 					if(!((((adcv[0] + 100) * 11) >= ((rv1 + 100) * 10)) && (((rv1 + 100) * 11) >= ((adcv[0] + 100) * 10)) && (((adcv[1] + 100) * 11) >= ((rv2 + 100) * 10)) && (((rv2 + 100) * 11) >= ((adcv[1] + 100) * 10)))) {
-						//min. 10% Abweichung => kein Widerstand
+						// min. 10% deviation => no resistance
 						tmpPartFound = PART_NONE;
 						goto testend;
 					}
@@ -866,7 +869,7 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 				rv1 = adcv[0];
 				rv2 = adcv[1];
 
-				radcmax1 = 1023 - adcv[2];	//Spannung am Low-Pin ist nicht ganz Null, sondern rund 0,1V (wird aber gemessen). Der dadurch entstehende Fehler wird hier kompenisert
+				radcmax1 = 1023 - adcv[2];	// Voltage at Low-Pin not quite zero, but around 0.1 V (but measured). The resulting error is compensated here
 				radcmax2 = 1023 - adcv[3];
 				ra = HighPin;
 				rb = LowPin;
@@ -881,8 +884,8 @@ void CheckPins(uint8_t HighPin, uint8_t LowPin, uint8_t TristatePin) {
 }
 
 void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
-	//Test auf Kondensator (auch nur auf ATMega8 möglich)
-	if((HighPin == cb) && (LowPin == ca)) return;	//Test schon mal mit umgekehrter Polung gelaufen
+	// Test capacitor (only possible on ATMega8)
+	if((HighPin == cb) && (LowPin == ca)) return;	// test already run with reversed polarity
 	unsigned long gcval = 0;
 	unsigned int tmpint = 0;
 	uint8_t extcnt = 0;
@@ -893,59 +896,59 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 	ADC_PORT = 0;
 	R_PORT = 0;
 	R_DDR = 0;
-	ADC_DDR = (1<<LowPin);	//Low-Pin fest auf Masse
-	R_DDR = tmpval2;		//HighPin über R_H auf Masse
+	ADC_DDR = (1<<LowPin);	// Low-Pin to ground
+	R_DDR = tmpval2;		// HighPin over R_H to ground
 	_delay_ms(5);
 	adcv[0] = ReadADC(HighPin);
 	DischargePin(HighPin,1);
 	_delay_ms(5);
 	adcv[1] = ReadADC(HighPin);
 	wdt_reset();
-	if(adcv[1] > (adcv[0] + 1)) {	//Spannung ist gestiegen
-		R_DDR = tmpval;			//High-Pin über R_L auf Masse
+	if(adcv[1] > (adcv[0] + 1)) {	// Voltage is increased
+		R_DDR = tmpval;			// High-Pin over R_L to ground
 		while(ReadADC(HighPin) > (ReadADC(LowPin) + 10)) {
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 30) break; //Timeout für Entladung
+				if(extcnt == 30) break; // Timeout for Discharge
 			}
 		}
 		tmpint = 0;
 		extcnt = 0;
-		R_PORT = tmpval;			//High-Pin über R_L auf Plus
+		R_PORT = tmpval;			// High-Pin over R_L to Plus
 		_delay_ms(5);
 		adcv[2] = ReadADC(HighPin);
 		_delay_ms(80);
 		adcv[3] = ReadADC(HighPin);
-		if((adcv[3] < (adcv[2] + 3)) && (adcv[3] < 850)) return;	//Spannung ist nicht nennenswert gestiegen => Abbruch
-		if((NumOfDiodes > 0) && (adcv[3] > 950)) return; //höchstwahrscheinlich eine (oder mehrere) Diode(n) in Sperrrichtung, die sonst fälschlicherweise als Kondensator erkannt wird
+		if((adcv[3] < (adcv[2] + 3)) && (adcv[3] < 850)) return;	// Voltage is not increased appreciably => Demolition
+		if((NumOfDiodes > 0) && (adcv[3] > 950)) return; // most likely one (or more) diode(s) in the reverse direction, which is usually incorrectly identified as a capacitor
 		R_PORT = 0;
 		while(ReadADC(HighPin) > (ReadADC(LowPin) + 10)) {
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 30) break; //Timeout für Entladung
+				if(extcnt == 30) break; // Timeout for Discharge
 			}
 		}
 		tmpint = 0;
 		extcnt = 0;
-		ADC_DDR = 7;					//alle Pins auf Ausgang und aus Masse
-		R_PORT = tmpval;  	   			// HighPin über R_L auf Plus
+		ADC_DDR = 7;					// All pins as outputs and to ground
+		R_PORT = tmpval;  	   			// HighPin over R_L to Plus
 		tmpval=(1<<HighPin);
 		_delay_ms(2);
-		ADC_DDR=(1<<LowPin);          // Kondensator über R_H langsam laden
-		while (!(ADC_PIN & tmpval)) {  // Warten, bis HighPin auf High geht; Schleife dauert 7 Zyklen
+		ADC_DDR=(1<<LowPin);          // Capacitor load slowly over R_H
+		while (!(ADC_PIN & tmpval)) {  // Wait until HighPin goes high; loop takes 7 cycles
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 30) break; //Timeout für Ladung
+				if(extcnt == 30) break; // Timeout for charge
 			}
 		}
-		if((extcnt == 0) && (tmpint<256)) {	//Niedrige Kapazität
-			//mit R_H erneut messen
+		if((extcnt == 0) && (tmpint<256)) {	// Low capacity
+			// measure again with R_H
 			R_PORT = 0;
 			tmpint = 0;
 			extcnt = 0;
@@ -954,61 +957,61 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 				tmpint++;
 				if(tmpint==0) {
 					extcnt++;
-					if(extcnt == 30) break; //Timeout für Entladung
+					if(extcnt == 30) break; // Timeout for Discharge
 				}
 			}
 			tmpint = 0;
 			extcnt = 0;
-			ADC_DDR = 7;					//alle Pins auf Ausgang
-			ADC_PORT = 0;					//alle Pins fest auf Masse
-			R_DDR = tmpval2;        		// HighPin über R_H auf Ausgang
-			R_PORT = tmpval2;  	   			// HighPin über R_H auf Plus
+			ADC_DDR = 7;					// All pins as outputs
+			ADC_PORT = 0;					// All pins to ground
+			R_DDR = tmpval2;        		// HighPin over R_H as output
+			R_PORT = tmpval2;  	   			// HighPin over R_H to Plus
 			_delay_ms(2);
-			ADC_DDR=(1<<LowPin);          // Kondensator über R_H langsam laden
-			while (!(ADC_PIN & tmpval)) {  // Warten, bis HighPin auf High geht; Schleife dauert 7 Zyklen
+			ADC_DDR=(1<<LowPin);          // capacitor load slowly over R_H
+			while (!(ADC_PIN & tmpval)) {  // Wait until HighPin goes high; loop takes 7 cycles
 				wdt_reset();
 				tmpint++;
 				if(tmpint==0) {
 					extcnt++;
-					if(extcnt == 30) break; //Timeout für Kapazitätsmessung
+					if(extcnt == 30) break; // timeout for capacitance measurement
 				}
 			}
 			tmpx = 1;
 		}
 		if(tmpx) {
 			gcval = H_CAPACITY_FACTOR;
-			if((extcnt == 0) && (tmpint < 5)) goto end;	//Kapazität zu gering
+			if((extcnt == 0) && (tmpint < 5)) goto end;	// capacity is too low
 			cv = 1;
 		} else {
 			gcval = L_CAPACITY_FACTOR;
 			cv = 1000;
 		}
 
-		gcval *= (unsigned long)(((unsigned long)extcnt * 65536) + (unsigned long)tmpint);	//Wert speichern
+		gcval *= (unsigned long)(((unsigned long)extcnt * 65536) + (unsigned long)tmpint);	// Store value
 		gcval /= 100;
 		cv *= gcval;
 
-		PartFound = PART_CAPACITOR;	//Kondensator gefunden
+		PartFound = PART_CAPACITOR;	// Capacitor found
 
 		ca = HighPin;
 		cb = LowPin;
-		//Kondensator wieder entladen
+		// Capacitor is discharged again
 		tmpint = 0;
 		extcnt = 0;
-		R_DDR = (1<<(2*HighPin));			//High-Pin über R_L auf Masse
+		R_DDR = (1<<(2*HighPin));			// High-Pin over R_L to ground
 		R_PORT = 0;
 		while(ReadADC(HighPin) > (ReadADC(LowPin) + 10)) {
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 30) break; //Timeout für Entladung
+				if(extcnt == 30) break; // Timeout for discharge
 			}
 		}
-		ADC_DDR = 7;	//komplett entladen
+		ADC_DDR = 7;	// fully discharged
 		ADC_PORT = 7;
 		_delay_ms(10);
-		//Fertig
+		// Done
 	}
 	end:
 	ADC_DDR = 0;				
@@ -1020,10 +1023,10 @@ void ReadCapacity(uint8_t HighPin, uint8_t LowPin) {
 
 
 unsigned int ReadADC(uint8_t mux) {
-	//ADC-Wert des angegebenen Kanals auslesen und als unsigned int zurückgegen
+	// Read ADC value of the specified channel and return as unsigned int
 	unsigned int adcx = 0;
 	ADMUX = mux | (1<<REFS0);
-	for(uint8_t j=0;j<20;j++) {	//20 Messungen; für bessere Genauigkeit
+	for(uint8_t j=0;j<20;j++) {	// 20 measurements, for better accuracy
 		ADCSRA |= (1<<ADSC);
 		while (ADCSRA&(1<<ADSC));
 		adcx += ADCW;
@@ -1040,90 +1043,90 @@ void GetGateThresholdVoltage(void) {
 	uint8_t extcnt = 0;
 	tmpval = (1<<(2*c) | (2<<(2*b)));
 	tmpval2=(1<<(2*c));
-	R_DDR = tmpval;        // Drain über R_L auf Ausgang, Gate über R_H auf Ausgang
-	ADC_DDR=(1<<e)|(1<<b);	//Gate und Source auf Ausgang
+	R_DDR = tmpval;        // Drain over R_L as output, Gate over R_H as output
+	ADC_DDR=(1<<e)|(1<<b);	// Gate and Source as outputs
 	if((PartFound==PART_FET) && (PartMode == PART_MODE_N_E_MOS)) {
-		//Gate-Schwellspannung messen
-		ADC_PORT = 0;			//Gate und Source fest auf Masse
-		R_PORT = tmpval;  	   // Drain über R_L auf Plus, Gate über R_H auf Plus
+		// Gate threshold voltage measured
+		ADC_PORT = 0;			// Gate and Source to ground
+		R_PORT = tmpval;  	   // Drain over R_L to Plus, Gate over R_H to Plus
 		tmpval=(1<<c);
 		_delay_ms(10);
-		ADC_DDR=(1<<e);          // Gate über R_H langsam laden
+		ADC_DDR=(1<<e);          // Gate over R_H load slowly
 	
-		while ((ADC_PIN&tmpval)) {  // Warten, bis der MOSFET schaltet und Drain auf low geht; Schleife dauert 7 Zyklen
+		while ((ADC_PIN&tmpval)) {  // Wait for the MOSFET to switch on and Drain goes low; loop takes 7 cycles
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 8) break; //Timeout für Gate-Schwellspannungs-Messung
+				if(extcnt == 8) break; // Timeout for gate threshold voltage measurement
 			}
 		}
 		
-		R_PORT=tmpval2;          // Gate hochohmig schalten
-		R_DDR=tmpval2;          // Gate hochohmig schalten
+		R_PORT=tmpval2;          // Gate to high impedance
+		R_DDR=tmpval2;          // Gate to high impedance
 		tmpintb=ReadADC(b);
 
-		//Gatekapazität messen
+		// Gate capacitance measurement
 		tmpint = 0;
 		extcnt = 0;
-		ADC_DDR = ((1<<e) | (1<<b) | (1<<c));	//Gate, Drain und Source auf Ausgang
-		ADC_PORT = 0;					//Gate, Drain und Source fest auf Masse
-		tmpval = (2<<(2*b));			//Gate über R_H auf Plus
-		R_DDR = tmpval;        // Drain über R_L auf Ausgang, Gate über R_H auf Ausgang
-		R_PORT = tmpval;  	   // Drain über R_L auf Plus, Gate über R_H auf Plus
+		ADC_DDR = ((1<<e) | (1<<b) | (1<<c));	//Gate, Drain and Source as outputs
+		ADC_PORT = 0;					// Gate, Drain and Source to ground
+		tmpval = (2<<(2*b));			// Gate over R_H to Plus
+		R_DDR = tmpval;        // Drain over R_L as output, Gate over R_H as output
+		R_PORT = tmpval;  	   // Drain over R_L to Plus, Gate over R_H to Plus
 		tmpval=(1<<b);
 		_delay_ms(10);
-		ADC_DDR=((1<<e) | (1<<c));          // Gate über R_H langsam laden
-		while (!(ADC_PIN & tmpval)) {  // Warten, bis Gate auf High geht; Schleife dauert 7 Zyklen
+		ADC_DDR=((1<<e) | (1<<c));          // Gate over R_H load slowly
+		while (!(ADC_PIN & tmpval)) {  // Wait until the gate goes high; loop takes 7 cycles
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 8) break; //Timeout für Gate-Schwellspannungs-Messung
+				if(extcnt == 8) break; // Timeout for gate threshold voltage measurement
 			}
 		}
-		gcval = N_GATE_CAPACITY_FACTOR;	//Wert für N-Kanal-MOSFET
+		gcval = N_GATE_CAPACITY_FACTOR;	// Value for N-Channel MOSFET
 
 	} else if((PartFound==PART_FET) && (PartMode == PART_MODE_P_E_MOS)) {
-		ADC_PORT = (1<<e)|(1<<b);	//Gate und Source fest auf Plus
-		R_PORT = 0;					//Drain über R_L auf Masse, Gate über R_H auf Masse
+		ADC_PORT = (1<<e)|(1<<b);	// Gate and Source to positive
+		R_PORT = 0;					// Drain over R_L to ground, Gate over R_H to ground
 		tmpval=(1<<c);
 		_delay_ms(10);
-		ADC_DDR=(1<<e);          // Gate über R_H langsam laden (Gate auf Eingang)
-		ADC_PORT=(1<<e);          // Gate über R_H langsam laden (Gate-Pullup aus)
-		while (!(ADC_PIN&tmpval)) {  // Warten, bis der MOSFET schaltet und Drain auf high geht
+		ADC_DDR=(1<<e);          // Gate over R_H load slowly (Gate as input)
+		ADC_PORT=(1<<e);          // Gate over R_H load slowly (Gate-Pullup off)
+		while (!(ADC_PIN&tmpval)) {  // Wait until the MOSFET is turned on and switches Drain to high
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 8) break; //Timeout für Gate-Schwellspannungs-Messung
+				if(extcnt == 8) break; // Timeout for gate threshold voltage measurement
 			}
 		}
-		R_DDR=tmpval2;          // Gate hochohmig schalten
+		R_DDR=tmpval2;          // Gate to high impedance
 		tmpintb=ReadADC(b);
 
-		//Gatekapazität messen
+		// Gate capacitance measurement
 		tmpint = 0;
 		extcnt = 0;
-		ADC_DDR = ((1<<e) | (1<<b) | (1<<c));	//Gate, Drain und Source auf Ausgang
-		ADC_PORT = ((1<<e) | (1<<b) | (1<<c));	//Gate, Drain und Source fest auf Plus
-		tmpval = (2<<(2*b));			//Gate über R_H auf Masse
-		R_DDR = tmpval;        			// Gate über R_H auf Ausgang
-		R_PORT = 0;  	   	  			// Gate über R_H auf Masse
+		ADC_DDR = ((1<<e) | (1<<b) | (1<<c));	// Gate, Drain and Source as outputs
+		ADC_PORT = ((1<<e) | (1<<b) | (1<<c));	// Gate, Drain and Source to Plus
+		tmpval = (2<<(2*b));			// Gate over R_H to ground
+		R_DDR = tmpval;        			// Gate over R_H as output
+		R_PORT = 0;  	   	  			// Gate over R_H to ground
 		tmpval=(1<<b);
 		_delay_ms(10);
-		tmpval2 = ((1<<e) | (1<<c));	// Gate über R_H langsam laden
+		tmpval2 = ((1<<e) | (1<<c));	// Gate over R_H load slowly
 		ADC_DDR=tmpval2;
 		ADC_PORT=tmpval2;
-		while (ADC_PIN & tmpval) {  // Warten, bis Gate auf High geht; Schleife dauert 7 Zyklen
+		while (ADC_PIN & tmpval) {  // Wait for gate goes high; loop takes 7 cycles
 			wdt_reset();
 			tmpint++;
 			if(tmpint==0) {
 				extcnt++;
-				if(extcnt == 8) break; //Timeout für Gate-Schwellspannungs-Messung
+				if(extcnt == 8) break; // Timeout for gate threshold voltage measurement
 			}
 		}
-		gcval = P_GATE_CAPACITY_FACTOR;	//Wert für P-Kanal-MOSFET
+		gcval = P_GATE_CAPACITY_FACTOR;	// Value for P-channel MOSFET
 
 	}
 	R_DDR = 0;
@@ -1137,14 +1140,14 @@ void GetGateThresholdVoltage(void) {
 		tmpintb=(tmpintb*39/8);
 		utoa(tmpintb, outval, 10);
 		/*
-		  Berechnung der Gate-Kapazität
-		  Bei Vcc=5V schalten die AVR-Portpins bei 3,6V um.
-		  Auf diese Spannung ist das Gate nun geladen.
-		  Das sind 72% der Betriebsspannung und ergibt damit eine Zeitkonstante von 1,28 Tau (1,28 R*C).
-		  Aus bisher nicht bekannten Gründen weicht der tatsächliche Wert aber deutlich davon ab.
-		  Die Berechnungsfaktoren sind als defines ganz oben zu finden und müssen ggf. angepasst werden.
+			Calculation of the gate capacitance
+			When Vcc = 5V switch the AVR port pins to 3.6 V.
+			At this voltage, the gate is now loaded.
+			This is 72% of the operating voltage and thus yields a time constant tau of 1.28 (1.28 R * C).
+			For unknown reasons, the actual value deviates significantly from it.
+			The calculation can be found as factors defines the top and may need to be adjusted.
 		*/
-		gcval *= (unsigned long)(((unsigned long)extcnt * 65536) + (unsigned long)tmpint);	//Wert speichern
+		gcval *= (unsigned long)(((unsigned long)extcnt * 65536) + (unsigned long)tmpint);	// Store value
 		gcval /= 100;
 		tmpint = (unsigned int)gcval;
 		if(tmpint>2) tmpint -= 3;
@@ -1153,19 +1156,20 @@ void GetGateThresholdVoltage(void) {
 }
 
 void DischargePin(uint8_t PinToDischarge, uint8_t DischargeDirection) {
-	/*Anschluss eines Bauelementes kurz(10ms) auf ein bestimmtes Potenzial legen
-		Diese Funktion ist zum Entladen von MOSFET-Gates vorgesehen, um Schutzdioden u.ä. in MOSFETs erkennen zu können
-		Parameter:
-		PinToDischarge: zu entladender Pin
-		DischargeDirection: 0 = gegen Masse (N-Kanal-FET), 1= gegen Plus(P-Kanal-FET)
+	/*
+		Connect a component for a short time (10 ms) to a particular potential
+		This function is provided for discharging of MOSFET gate in order for the protection diodes to be seen
+		Parameters:
+		PinToDischarge: the pin to be discharged
+		DischargeDirection: 0 = to ground (N-channel FET), 1 = connected to positive (P-channel FET)
 	*/
 	uint8_t tmpval;
-	tmpval = (PinToDischarge * 2);		//nötig wegen der Anordnung der Widerstände
+	tmpval = (PinToDischarge * 2);		// required because of the arrangement of the resistors
 
 	if(DischargeDirection) R_PORT |= (1<<tmpval);			//R_L aus
-	R_DDR |= (1<<tmpval);			//Pin auf Ausgang und über R_L auf Masse
+	R_DDR |= (1<<tmpval);			// Pin as output and over R_L to ground
 	_delay_ms(10);
-	R_DDR &= ~(1<<tmpval);			//Pin wieder auf Eingang
+	R_DDR &= ~(1<<tmpval);			// Pin as input again
 	if(DischargeDirection) R_PORT &= ~(1<<tmpval);			//R_L aus
 }
 
